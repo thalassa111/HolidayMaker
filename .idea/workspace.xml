@@ -5,19 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f214bbfb-f4eb-42ac-8f37-35ee6e0e7725" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/holidaymaker/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/holidaymaker/database/Database.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/holidaymaker/database/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/holidaymaker/database/Users.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/holidaymaker/menu/MenuAction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/holidaymaker/menu/MenuHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/holidaymaker/menu/ActionAddCustomer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/holidaymaker/menu/MenuHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/holidaymaker/menu/MenuHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,7 +52,7 @@
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.lookFeel"
+    "settings.editor.selected.configurable": "preferences.keymap"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -73,7 +63,7 @@
       <recent name="org.example" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.CalculatorTest">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.holidaymaker.Main" />
       <module name="HolidayMaker" />
@@ -120,8 +110,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.CalculatorTest" />
         <item itemvalue="Application.Main" />
+        <item itemvalue="JUnit.CalculatorTest" />
         <item itemvalue="JUnit.CalculatorTest.onePlusOneIsTwo" />
       </list>
     </recent_temporary>
