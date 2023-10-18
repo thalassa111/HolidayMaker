@@ -19,12 +19,16 @@ public class MenuHandler {
             System.out.println("Menu");
             System.out.println("1. add customer");
             System.out.println("2. list activities");
+            System.out.println("3. Exit system");
             int choice = scanner.nextInt();
 
             //will run the method executeAction depending on the choice picked earlier
             if(menuOptions.containsKey(choice)) {
                 menuOptions.get(choice).executeAction();
-            } else{
+            } else if(choice == 3) {
+                System.out.println("Exiting system...");
+                System.exit(0);
+            } else {
                 System.out.println("Invalid choice, pick again!");
             }
         }
