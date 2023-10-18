@@ -11,12 +11,14 @@ public class MenuHandler {
     //add new meny things here
     public MenuHandler(){
         menuOptions.put(1, new ActionAddCustomer());
+        menuOptions.put(2, new ActionTest());
     }
 
     public void displayMenu(){
         while(true){
             System.out.println("Menu");
             System.out.println("1. add customer");
+            System.out.println("2. list activities");
             int choice = scanner.nextInt();
 
             //will run the method executeAction depending on the choice picked earlier
