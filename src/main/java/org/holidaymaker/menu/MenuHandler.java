@@ -11,7 +11,7 @@ public class MenuHandler {
     //add new meny things here
     public MenuHandler(){
         menuOptions.put(1, new ActionAddCustomer());
-        menuOptions.put(2, new ActionTest());
+        menuOptions.put(2, new ActionListActivities());
     }
 
     public void displayMenu(){
