@@ -17,7 +17,7 @@ public class Database {
         connectToDb();
     }
 
-    //use this to get the only instance of the database
+    //use this to get the only instance of the database, if there isnt one, one will be created.
     public static Database getInstance(){
         if(instance == null){
             synchronized (Database.class){
