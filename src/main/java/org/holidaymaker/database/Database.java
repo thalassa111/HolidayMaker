@@ -17,13 +17,13 @@ public class Database {
 
     void connectToDb(){
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://161.97.144.27:8010/test?user=root&password=helpingfindinginnings");
+            conn = DriverManager.getConnection("jdbc:mysql://161.97.144.27:8010/holidayHomes?user=root&password=helpingfindinginnings");
         } catch (Exception ex) { ex.printStackTrace(); }
     }
 
     void getAllUsers(){
         try {
-            statement = conn.prepareStatement("SELECT * FROM users");
+            statement = conn.prepareStatement("SELECT * FROM customer");
             resultSet = statement.executeQuery();
         } catch (Exception ex) { ex.printStackTrace(); }
     }
@@ -31,7 +31,7 @@ public class Database {
 
     void createNewUser(String name, String type, String email){
         try {
-            statement = conn.prepareStatement("INSERT INTO users SET name = ?, type = ?, email = ?");
+            statement = conn.prepareStatement("INSERT INTO customer SET name = ?, type = ?, email = ?");
             statement.setString(1,name);
             statement.setString(2,type);
 /*            statement.setString(3,email);*/
