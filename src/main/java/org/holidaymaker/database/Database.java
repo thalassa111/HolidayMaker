@@ -28,6 +28,17 @@ public class Database {
         } catch (Exception ex) { ex.printStackTrace(); }
     }
 
+    public void createNewActivity(String name, String date, String location, double price, String description){
+        try {
+            statement = conn.prepareStatement("INSERT INTO activity SET name = ?, date = ?, location = ?, price = ?, description = ?");
+            statement.setString(1,name);
+            statement.setString(2,date);
+            statement.setString(3,location);
+            statement.setDouble(4,price);
+            statement.setString(5,description);
+            statement.executeUpdate();
+        } catch (Exception ex) { ex.printStackTrace(); }
+    }
 
     void createNewUser(String name, String type, String email){
         try {
