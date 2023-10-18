@@ -1,5 +1,6 @@
 package org.holidaymaker.database;
 
+import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,13 +8,30 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class Database {
+    private static Database instance;
     ResultSet resultSet;
     PreparedStatement statement;
     Connection conn = null;
 
-    public Database(){
+    private Database(){
         connectToDb();
     }
+
+    //use this to get the only instance of the database
+    public static Database getInstance(){
+        if(instance == null){
+            synchronized (Database.class){
+                if(instance == null){
+                    instance = new Database();
+                }
+            }
+        }
+        return instance;
+    }
+
+    /*public Database(){
+        connectToDb();
+    }*/
 
     void connectToDb(){
         try {
@@ -29,12 +47,12 @@ public class Database {
     }
 
 
-    void createNewUser(String name, String type, String email){
+    public void createNewUser(String name, String type, String email){
         try {
             statement = conn.prepareStatement("INSERT INTO customer SET name = ?, type = ?, email = ?");
             statement.setString(1,name);
             statement.setString(2,type);
-/*            statement.setString(3,email);*/
+            statement.setString(3,email);
             statement.executeUpdate();
         } catch (Exception ex) { ex.printStackTrace(); }
     }

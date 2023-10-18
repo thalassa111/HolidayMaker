@@ -9,8 +9,8 @@ public class Main {
         MenuHandler menuHandler = new MenuHandler();
         menuHandler.displayMenu();
 
-        Database db = new Database();
-        Users users = new Users();
-        users.printAllUsers();
+        /*Database db = new Database();*/
+/*        Users users = new Users();
+        users.printAllUsers();*/
     }
 }
