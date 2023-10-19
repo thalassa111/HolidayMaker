@@ -8,7 +8,8 @@ public class Users {
     private ArrayList<User> list;
 
     public Users() {
-        this.db = new Database();
+        /*this.db = new Database();*/
+        this.db = Database.getInstance();
         this.list = db.listOfAllUsers();
     }
 
