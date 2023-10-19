@@ -7,6 +7,5 @@ public class ActionListActivities implements MenuAction{
     public void executeAction() {
         Activities activities = new Activities();
         activities.printAllActivities();
-
     }
 }
