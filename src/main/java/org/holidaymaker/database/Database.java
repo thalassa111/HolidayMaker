@@ -1,6 +1,5 @@
 package org.holidaymaker.database;
 
-import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,7 +12,7 @@ public class Database {
     PreparedStatement statement;
     Connection conn = null;
 
-    private Database(){
+    public Database(){
         connectToDb();
     }
 
@@ -65,5 +64,32 @@ public class Database {
             }
         } catch (Exception ex){ ex.printStackTrace(); }
         return tempList;
+    }
+
+    void getAllActivities() {
+        try {
+            statement = conn.prepareStatement("SELECT * FROM activity");
+            resultSet = statement.executeQuery();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public ArrayList<Activity> listOfAllActivities() {
+        getAllActivities();
+        ArrayList<Activity> activitiesList = new ArrayList<Activity>();
+        try {
+            while (resultSet.next()) {
+                activitiesList.add(new Activity(Integer.parseInt(resultSet.getString("id")),
+                        resultSet.getString("activity_name"),
+                        resultSet.getDate("activity_date"),
+                        resultSet.getString("location"),
+                        resultSet.getInt("Price"),
+                        resultSet.getString("Description")));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return activitiesList;
     }
 }
