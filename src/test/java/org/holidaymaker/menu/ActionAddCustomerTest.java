@@ -1,6 +1,5 @@
 package org.holidaymaker.menu;
 
-import org.holidaymaker.database.Database;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -25,13 +24,12 @@ class ActionAddCustomerTest {
 
     @Test
     void add() {
-        int result = actionAddCustomer.add(1,1);
-        assertEquals(2,result);
+        int result = actionAddCustomer.add(2,2);
+        assertEquals(4,result);
     }
 
     @Test
     void addData() {
-        /*Database db = Database.getInstance();*/
         String testInput = "TestName\nTestType\nTestEmail\n";
         Scanner scanner = new Scanner(testInput);
 

@@ -29,10 +29,6 @@ public class Database {
         return instance;
     }
 
-    /*public Database(){
-        connectToDb();
-    }*/
-
     void connectToDb(){
         try {
             conn = DriverManager.getConnection("jdbc:mysql://161.97.144.27:8010/holidayHomes?user=root&password=helpingfindinginnings");
