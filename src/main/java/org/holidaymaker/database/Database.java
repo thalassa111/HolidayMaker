@@ -88,6 +88,25 @@ public class Database {
         }
     }
 
+public Activity getActivityByName(String activityName) {
+    try {
+        statement = conn.prepareStatement("SELECT * FROM activity WHERE activity_name = ?");
+        statement.setString(1, activityName);
+        resultSet = statement.executeQuery();
+        if (resultSet.next()) {
+            return new Activity(Integer.parseInt(resultSet.getString("id")),
+                    resultSet.getString("activity_name"),
+                    resultSet.getDate("activity_date"),
+                    resultSet.getString("location"),
+                    resultSet.getInt("Price"),
+                    resultSet.getString("Description"));
+        }
+    } catch (Exception ex) {
+        ex.printStackTrace();
+    }
+    return null;
+}
+
     public ArrayList<Activity> listOfAllActivities() {
         getAllActivities();
         ArrayList<Activity> activitiesList = new ArrayList<Activity>();
