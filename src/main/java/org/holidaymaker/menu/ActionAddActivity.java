@@ -10,10 +10,10 @@ public class ActionAddActivity implements MenuAction {
         Scanner scanner = new Scanner(System.in);
         
         System.out.print("Enter activity name: ");
-        String name = scanner.nextLine();
+        String activity_name = scanner.nextLine();
         
         System.out.print("Enter activity date (YYYY-MM-DD): ");
-        String date = scanner.nextLine();
+        String activity_date = scanner.nextLine();
         
         System.out.print("Enter activity location: ");
         String location = scanner.nextLine();
@@ -25,11 +25,10 @@ public class ActionAddActivity implements MenuAction {
         System.out.print("Enter activity description: ");
         String description = scanner.nextLine();
         
-        // Create a Database instance
-        Database activities = new Database();
+        Database db = Database.getInstance();
         
         // Call the createNewActivity method in the Database class to insert the activity
-        activities.createNewActivity(name, date, location, price, description);
+        db.createNewActivity(activity_name, activity_date, location, price, description);
         
         System.out.println("Activity added successfully!");
     }
