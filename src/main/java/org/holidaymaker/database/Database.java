@@ -52,6 +52,14 @@ public class Database {
         } catch (Exception ex) { ex.printStackTrace(); }
     }
 
+    public void deleteUserByID(int customerID){
+        try{
+            statement = conn.prepareStatement("DELETE FROM customer WHERE id = ?");
+            statement.setInt(1,customerID);
+            statement.executeUpdate();
+        }catch (Exception ex){ex.printStackTrace();}
+    }
+
     public ArrayList<User> listOfAllUsers(){
         getAllUsers();
         ArrayList<User> tempList = new ArrayList<User>();
