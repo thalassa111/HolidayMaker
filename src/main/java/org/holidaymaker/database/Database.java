@@ -12,6 +12,10 @@ public class Database {
     PreparedStatement statement;
     Connection conn = null;
 
+    public void setConn(Connection conn) {
+        this.conn = conn;
+    }
+
     public Database(){
         conn = connectToDb("jdbc:mysql://161.97.144.27:8010/holidayHomes?user=root&password=helpingfindinginnings");
     }

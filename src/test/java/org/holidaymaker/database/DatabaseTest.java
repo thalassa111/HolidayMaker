@@ -2,7 +2,6 @@ package org.holidaymaker.database;
 
 import org.junit.jupiter.api.Test;
 
-import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -10,6 +9,35 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DatabaseTest {
+
+    //check if a user is created by saving id of lastuser, then creating a testuser, and then saving id of lastuser
+    //again and comparing them, they should not be equal, and it passed
+    @Test
+    void createNewUser() {
+        Connection conn = null;
+        try{
+            Database dbInstance = Database.getInstance();
+            //connect to a test schema instead of real one
+            conn = dbInstance.connectToDb("jdbc:mysql://161.97.144.27:8010/test?user=root&password=helpingfindinginnings");
+            dbInstance.setConn(conn);
+            Users users = new Users();
+            int lastIdBefore;
+            if(users.getList().isEmpty()){
+                lastIdBefore = 0;
+            }else{
+                lastIdBefore = users.getLastUsersID();
+            }
+            dbInstance.createNewUser("testName", "testType", "testEmail");
+            users.updateListFromDb();
+            int lastIdAfter = users.getLastUsersID();
+            //assert, check that lastIdAfter and lastIdBefore are not equal
+            assertNotEquals(lastIdAfter, lastIdBefore);
+            //cleanup, deleting the last one added
+            dbInstance.deleteUserByID(lastIdAfter);
+        }catch(Exception ex){
+            fail("Exception should not be thrown: " + ex.getMessage());
+        }
+    }
 
     //test if deleteUserByID is working by creating a user, saving its ID,
     //and deleting the user and checking if the saved id exists, if it doesn't
