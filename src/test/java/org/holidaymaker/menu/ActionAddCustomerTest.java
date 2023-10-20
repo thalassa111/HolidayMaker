@@ -28,12 +28,6 @@ class ActionAddCustomerTest {
     }
 
     @Test
-    void add() {
-        int result = actionAddCustomer.add(2,2);
-        assertEquals(4,result);
-    }
-
-    @Test
     void addData() {
         String testInput = "TestName\nTestType\nTestEmail\n";
         Scanner scanner = new Scanner(testInput);
