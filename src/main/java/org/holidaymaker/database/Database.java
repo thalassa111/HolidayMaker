@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Date;
 import java.util.ArrayList;
 
 public class Database {
@@ -12,15 +13,15 @@ public class Database {
     PreparedStatement statement;
     Connection conn = null;
 
-    public Database(){
+    public Database() {
         connectToDb();
     }
 
     //use this to get the only instance of the database, if there isnt one, one will be created.
-    public static Database getInstance(){
-        if(instance == null){
-            synchronized (Database.class){
-                if(instance == null){
+    public static Database getInstance() {
+        if (instance == null) {
+            synchronized (Database.class) {
+                if (instance == null) {
                     instance = new Database();
                 }
             }
@@ -28,31 +29,37 @@ public class Database {
         return instance;
     }
 
-    void connectToDb(){
+    void connectToDb() {
         try {
             conn = DriverManager.getConnection("jdbc:mysql://161.97.144.27:8010/holidayHomes?user=root&password=helpingfindinginnings");
-        } catch (Exception ex) { ex.printStackTrace(); }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
-    void getAllUsers(){
+    void getAllUsers() {
         try {
             statement = conn.prepareStatement("SELECT * FROM customer");
             resultSet = statement.executeQuery();
-        } catch (Exception ex) { ex.printStackTrace(); }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 
-    public void createNewUser(String name, String type, String email){
+    public void createNewUser(String name, String type, String email) {
         try {
             statement = conn.prepareStatement("INSERT INTO customer SET name = ?, type = ?, email = ?");
-            statement.setString(1,name);
-            statement.setString(2,type);
-            statement.setString(3,email);
+            statement.setString(1, name);
+            statement.setString(2, type);
+            statement.setString(3, email);
             statement.executeUpdate();
-        } catch (Exception ex) { ex.printStackTrace(); }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
-    public ArrayList<User> listOfAllUsers(){
+    public ArrayList<User> listOfAllUsers() {
         getAllUsers();
         ArrayList<User> tempList = new ArrayList<User>();
         try {
@@ -62,7 +69,9 @@ public class Database {
                         resultSet.getString("type"),
                         resultSet.getString("email")));
             }
-        } catch (Exception ex){ ex.printStackTrace(); }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         return tempList;
     }
 
@@ -91,5 +100,48 @@ public class Database {
             ex.printStackTrace();
         }
         return activitiesList;
+    }
+
+    public int findActivityById(int id) {
+        try {
+            statement = conn.prepareStatement("SELECT * FROM activity WHERE id = ?");
+            resultSet = statement.executeQuery();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return id;
+    }
+
+    void getAllBookings() {
+        try {
+            statement = conn.prepareStatement("SELECT * FROM booking");
+            resultSet = statement.executeQuery();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public ArrayList<Booking> ListOfAllBookings() {
+        getAllBookings();
+        ArrayList<Booking> BookingList = new ArrayList<Booking>();
+        try {
+            while (resultSet.next()) {
+                BookingList.add(new Booking(Integer.parseInt(resultSet.getString("id")),
+                        resultSet.getDate("booking_date")));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return BookingList;
+    }
+
+    public void createNewBooking(Date date) {
+        try {
+            statement = conn.prepareStatement("INSERT INTO booking SET booking_date = ?");
+            statement.setDate(1, date);
+            statement.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }
