@@ -47,8 +47,6 @@ public class TravelPackageTest {
         Activity activity3 = new Activity(3, "Vandring Inkaleden", date3, "Peru", 15000, "Vandraring i bergen i Peru");
 
 
-
-
         activities.getList().add(activity1);
         activities.getList().add(activity2);
         activities.getList().add(activity3);
