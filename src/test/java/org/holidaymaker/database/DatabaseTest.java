@@ -2,6 +2,9 @@ package org.holidaymaker.database;
 
 import org.junit.jupiter.api.Test;
 
+import javax.xml.crypto.Data;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,5 +27,25 @@ class DatabaseTest {
                 inDb =  true;
         }
         assertFalse(inDb);
+    }
+
+    //will try connectToDb method, trying to connect to a different schema, "test", instead of the real one, then make
+    //assertFalse to see if there is a connection.
+    @Test
+    void connectToDb() {
+        Connection conn = null;
+        try{
+            conn = Database.getInstance().connectToDb("jdbc:mysql://161.97.144.27:8010/test?user=root&password=helpingfindinginnings");
+            assertFalse(conn.isClosed());
+        }catch (Exception ex){
+            fail("Exception should not be thrown: " + ex.getMessage());
+        }
+        try {
+            if (conn != null) {
+                conn.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("something went wrong with the connection");
+        }
     }
 }
