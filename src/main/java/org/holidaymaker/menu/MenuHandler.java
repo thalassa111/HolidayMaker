@@ -13,6 +13,8 @@ public class MenuHandler {
         menuOptions.put(1, new ActionAddCustomer());
         menuOptions.put(2, new ActionListCustomer());
         menuOptions.put(3, new ActionListActivities());
+        menuOptions.put(4, new ActionRemoveCustomer());
+
     }
 
     public void displayMenu(){
@@ -21,13 +23,14 @@ public class MenuHandler {
             System.out.println("1. add customer");
             System.out.println("2. list customer");
             System.out.println("3. list activities");
-            System.out.println("4. Exit system");
+            System.out.println("4. remove customer");
+            System.out.println("0. Exit system");
             int choice = scanner.nextInt();
 
             //will run the method executeAction depending on the choice picked earlier
             if(menuOptions.containsKey(choice)) {
                 menuOptions.get(choice).executeAction();
-            } else if(choice == 4) {
+            } else if(choice == 0) {
                 System.out.println("Exiting system...");
                 System.exit(0);
             } else {
