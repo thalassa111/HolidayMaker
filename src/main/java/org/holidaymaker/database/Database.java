@@ -107,6 +107,16 @@ public Activity getActivityByName(String activityName) {
     return null;
 }
 
+public void removeActivityById(int id) {
+    try {
+        statement = conn.prepareStatement("DELETE FROM activity WHERE id = ?");
+        statement.setInt(1, id);
+        statement.executeUpdate();
+    } catch (Exception ex) {
+        ex.printStackTrace();
+    }
+}
+
     public ArrayList<Activity> listOfAllActivities() {
         getAllActivities();
         ArrayList<Activity> activitiesList = new ArrayList<Activity>();
