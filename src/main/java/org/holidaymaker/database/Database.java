@@ -13,7 +13,7 @@ public class Database {
     Connection conn = null;
 
     public Database(){
-        connectToDb();
+        conn = connectToDb("jdbc:mysql://161.97.144.27:8010/holidayHomes?user=root&password=helpingfindinginnings");
     }
 
     //use this to get the only instance of the database, if there isnt one, one will be created.
@@ -28,10 +28,11 @@ public class Database {
         return instance;
     }
 
-    void connectToDb(){
+    Connection connectToDb(String dbUrl){
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://161.97.144.27:8010/holidayHomes?user=root&password=helpingfindinginnings");
+            return DriverManager.getConnection(dbUrl);
         } catch (Exception ex) { ex.printStackTrace(); }
+        return null;
     }
 
     void getAllUsers(){
@@ -50,6 +51,14 @@ public class Database {
             statement.setString(3,email);
             statement.executeUpdate();
         } catch (Exception ex) { ex.printStackTrace(); }
+    }
+
+    public void deleteUserByID(int customerID){
+        try{
+            statement = conn.prepareStatement("DELETE FROM customer WHERE id = ?");
+            statement.setInt(1,customerID);
+            statement.executeUpdate();
+        }catch (Exception ex){ex.printStackTrace();}
     }
 
     public ArrayList<User> listOfAllUsers(){

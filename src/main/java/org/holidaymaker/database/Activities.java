@@ -13,6 +13,10 @@ public class Activities {
         this.list = db.listOfAllActivities();
     }
 
+    public void setList(ArrayList<Activity> list) {
+        this.list = list;
+    }
+
     public void printAllActivities(){
         for (int i = 0; i < this.list.size(); i++) {
             System.out.println(this.list.get(i).toString());
@@ -50,4 +54,3 @@ public class Activities {
         return list;
     }
 }
-

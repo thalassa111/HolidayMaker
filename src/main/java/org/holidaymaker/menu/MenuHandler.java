@@ -18,21 +18,26 @@ public class MenuHandler {
 
         // Add new menu items here
         menuOptions.put(1, new ActionAddCustomer());
-        menuOptions.put(2, new ActionListActivities(activities, travelPackage));
+        menuOptions.put(2, new ActionListCustomer());
+        menuOptions.put(3, new ActionListActivities(activities, travelPackage));
+        menuOptions.put(4, new ActionRemoveCustomer());
+
     }
 
-    public void displayMenu() {
-        while (true) {
+    public void displayMenu(){
+        while(true){
             System.out.println("Menu");
             System.out.println("1. add customer");
-            System.out.println("2. list activities");
-            System.out.println("3. Exit system");
+            System.out.println("2. list customer");
+            System.out.println("3. list activities");
+            System.out.println("4. remove customer");
+            System.out.println("0. Exit system");
             int choice = scanner.nextInt();
 
-            // will run the method executeAction depending on the choice picked earlier
-            if (menuOptions.containsKey(choice)) {
+            //will run the method executeAction depending on the choice picked earlier
+            if(menuOptions.containsKey(choice)) {
                 menuOptions.get(choice).executeAction();
-            } else if (choice == 3) {
+            } else if(choice == 0) {
                 System.out.println("Exiting system...");
                 System.exit(0);
             } else {

@@ -7,8 +7,11 @@ public class Users {
     private Database db;
     private ArrayList<User> list;
 
+    public ArrayList<User> getList() {
+        return list;
+    }
+
     public Users() {
-        /*this.db = new Database();*/
         this.db = Database.getInstance();
         this.list = db.listOfAllUsers();
     }
@@ -20,7 +23,9 @@ public class Users {
     public String getLastUsersName(){
         return this.list.get(this.list.size() - 1).name();
     }
-
+    public int getLastUsersID(){
+        return this.list.get(this.list.size() - 1).id();
+    }
     public void createUser(String name, String type, String email){
         db.createNewUser(name, type, email);
         this.list = db.listOfAllUsers();
@@ -29,6 +34,15 @@ public class Users {
         for (int i = 0; i < this.list.size(); i++) {
             System.out.println(this.list.get(i).toString());
         }
+    }
+
+    public boolean isInDb(int id){
+        for (int i = 0; i < this.list.size(); i++) {
+            if(id == this.list.get(i).id()){
+                return true;
+            }
+        }
+        return false;
     }
 
 }
