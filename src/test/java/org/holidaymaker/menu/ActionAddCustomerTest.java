@@ -27,6 +27,9 @@ class ActionAddCustomerTest {
     void executeAction() {
     }
 
+    //testing the method of creating a new customer by simulating input, and then comparing it to a string
+    //which is expected as the output. the addData method will also create a new customer which will be removed in
+    //@AfterEach
     @Test
     void addData() {
         String testInput = "TestName\nTestType\nTestEmail\n";
@@ -41,6 +44,7 @@ class ActionAddCustomerTest {
         assertEquals(expectedOutput, output.toString());
     }
 
+    //remove test user(s) created by addData() method
     @AfterEach
     void tearDown() {
         ArrayList<User> tmpList = Database.getInstance().listOfAllUsers();
