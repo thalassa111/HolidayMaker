@@ -15,6 +15,7 @@ public class MenuHandler {
         menuOptions.put(3, new ActionListActivities());
         menuOptions.put(4, new ActionRemoveCustomer());
         menuOptions.put(5, new ActionBooking());
+        menuOptions.put(6, new ActionCheckBookings());
     }
 
     public void displayMenu(){
@@ -25,6 +26,7 @@ public class MenuHandler {
             System.out.println("3. list activities");
             System.out.println("4. remove customer");
             System.out.println("5. Add Booking");
+            System.out.println("6. Check Bookings");
             System.out.println("0. Exit system");
             int choice = scanner.nextInt();
 

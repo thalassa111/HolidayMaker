@@ -10,10 +10,21 @@ public class ActionRemoveCustomer implements MenuAction{
     @Override
     public void executeAction() {
         Users users = new Users();
-        users.printAllUsers();
-        System.out.print("Enter the id of who you want to remove: ");
-        int removeID = scanner.nextInt();
-        Database.getInstance().deleteUserByID(removeID);
-        System.out.println("removed customer with id: " + removeID);
+        int choice;
+        do {
+            users.printAllUsers();
+            System.out.println("Enter the id of who you want to remove: ");
+            System.out.println("0. back");
+            choice = scanner.nextInt();
+            if(users.isInDb(choice)) {
+                Database.getInstance().deleteUserByID(choice);
+                users.updateListFromDb();
+                System.out.println("removed customer with id: " + choice);
+                break;
+            }
+            else{
+                System.out.println("wrong choice, try again!");
+            }
+        }while(choice != 0);
     }
 }
