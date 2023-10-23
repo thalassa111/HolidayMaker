@@ -3,16 +3,23 @@ package org.holidaymaker.menu;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import org.holidaymaker.database.Activities;
+import org.holidaymaker.database.TravelPackage;
 
 public class MenuHandler {
     Scanner scanner = new Scanner(System.in);
     private Map<Integer, MenuAction> menuOptions = new HashMap<>();
+    private Activities activities;
+    private TravelPackage travelPackage;
 
-    //add new meny things here
-    public MenuHandler(){
+    public MenuHandler() {
+        this.activities = new Activities();
+        this.travelPackage = new TravelPackage();
+
+        // Add new menu items here
         menuOptions.put(1, new ActionAddCustomer());
         menuOptions.put(2, new ActionListCustomer());
-        menuOptions.put(3, new ActionListActivities());
+        menuOptions.put(3, new ActionListActivities(activities, travelPackage));
         menuOptions.put(4, new ActionBooking());
         menuOptions.put(5, new ActionCheckBookings());
     }
@@ -21,7 +28,7 @@ public class MenuHandler {
         while(true){
             System.out.println("Menu");
             System.out.println("1. add customer");
-            System.out.println("2. list customers");
+            System.out.println("2. list customer");
             System.out.println("3. list activities");
             System.out.println("4. Add Booking");
             System.out.println("5. Check Bookings");
