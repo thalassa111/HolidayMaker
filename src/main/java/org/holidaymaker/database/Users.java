@@ -16,6 +16,10 @@ public class Users {
         this.list = db.listOfAllUsers();
     }
 
+    public void updateListFromDb(){
+        this.list = db.listOfAllUsers();
+    }
+
     public String getUserName(){
         return this.list.get(0).name();
     }
@@ -44,5 +48,4 @@ public class Users {
         }
         return false;
     }
-
 }
