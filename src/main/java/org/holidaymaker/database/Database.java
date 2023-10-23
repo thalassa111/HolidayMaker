@@ -158,10 +158,29 @@ public class Database {
         return BookingList;
     }
 
-    public void createNewBooking(Date date) {
+    public int createNewBooking(Date date) {
+        int generatedId = -1;
+
         try {
-            statement = conn.prepareStatement("INSERT INTO booking SET booking_date = ?");
+            statement = conn.prepareStatement("INSERT INTO booking SET booking_date = ?", statement.RETURN_GENERATED_KEYS);
             statement.setDate(1, date);
+            statement.executeUpdate();
+
+            ResultSet generatedKeys = statement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                generatedId = generatedKeys.getInt(1); // Assuming the primary key is an integer.
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return generatedId;
+    }
+
+    public void createNewBookingCustomer(int customerId, int bookingId) {
+        try {
+            statement = conn.prepareStatement("INSERT INTO bookingCustomers SET customer_ID = ?, booking_ID = ?");
+            statement.setInt(1, customerId);
+            statement.setInt(2, bookingId);
             statement.executeUpdate();
         } catch (Exception ex) {
             ex.printStackTrace();

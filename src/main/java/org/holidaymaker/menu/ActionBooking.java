@@ -9,17 +9,21 @@ import java.util.Scanner;
 public class ActionBooking implements MenuAction {
     @Override
     public void executeAction() {
+        Database db = Database.getInstance();
 
-        ArrayList<User> Costumers = new ArrayList<User>();
+        ArrayList<User> Customers;
         ArrayList<Activity> Activities = new ArrayList<Activity>();
 
-        Costumers = selectCustomers();
-        Activities = selectActivities();
+        Customers = selectCustomers();
+        /*Activities = selectActivities();*/
 
-        if (!Costumers.isEmpty()){
-            Database db = Database.getInstance();
+        if (!Customers.isEmpty()) {
             Date currentDate = new Date(System.currentTimeMillis());
-            db.createNewBooking(currentDate);
+            int newBookingId = db.createNewBooking(currentDate);
+
+            for (User customer : Customers) {
+                db.createNewBookingCustomer(customer.id(), newBookingId);
+            }
         }
     }
 
@@ -48,16 +52,38 @@ public class ActionBooking implements MenuAction {
 
     private ArrayList<User> selectCustomers() {
         Database db = Database.getInstance();
+        ArrayList<User> selectedCustomers = new ArrayList<>();
 
+        // Print all customers
         System.out.println("Users:");
-        Users users = new Users();
-        users.printAllUsers();
+        Users usersUtil = new Users();
+        usersUtil.printAllUsers();
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Choose user: ");
+        System.out.println("Choose user or exit '0'");
 
-        System.out.println("Chosen User: " + db.findUserById(scanner.nextInt()));
-        return db.findUserById(scanner.nextInt());
+        //Choose customers
+        int userInput;
+        while ((userInput = scanner.nextInt()) != 0) {
+            ArrayList<User> foundUsers = db.findUserById(userInput);
+            if (!foundUsers.isEmpty()) {
+                selectedCustomers.addAll(foundUsers);
+                System.out.println("Chosen User: " + foundUsers.get(0));
+            } else {
+                System.out.println("No user found for ID: " + userInput);
+            }
+        }
+
+        System.out.println("Chosen Users: ");
+        for (User selectedCustomer : selectedCustomers) {
+            System.out.println(selectedCustomer);
+        }
+
+        return selectedCustomers;
+    }
+
+    private void CreateBookingCustomer(){
+
     }
 
     public void testData(Scanner tester) {
