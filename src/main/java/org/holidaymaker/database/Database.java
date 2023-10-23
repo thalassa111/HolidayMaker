@@ -18,7 +18,7 @@ public class Database {
     }
 
     public Database(){
-        conn = connectToDb("jdbc:mysql://161.97.144.27:8010/holidayHomes?user=root&password=helpingfindinginnings");
+        this.conn = connectToDb("jdbc:mysql://161.97.144.27:8010/holidayHomes?user=root&password=helpingfindinginnings");
     }
 
     //use this to get the only instance of the database, if there isnt one, one will be created.
@@ -92,6 +92,32 @@ public class Database {
             ex.printStackTrace();
         }
         return tempList;
+    }
+
+    public int getPriceOfActivityByID(int activityID){
+        int price = 0;
+        try{
+            statement = conn.prepareStatement("SELECT * FROM activity WHERE id = ?");
+            statement.setInt(1,activityID);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                price = resultSet.getInt("price");
+            }
+        }catch (Exception ex){ex.printStackTrace();}
+        return price;
+    }
+
+    public int getPriceOfBookingByID(int bookingID){
+        int price = 0;
+        try{
+            statement = conn.prepareStatement("SELECT * FROM booking WHERE id = ?");
+            statement.setInt(1,bookingID);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                price = resultSet.getInt("price");
+            }
+        }catch (Exception ex){ex.printStackTrace();}
+        return price;
     }
 
     void getAllActivities() {
@@ -181,7 +207,8 @@ public class Database {
         try {
             while (resultSet.next()) {
                 BookingList.add(new Booking(Integer.parseInt(resultSet.getString("id")),
-                        resultSet.getDate("booking_date")));
+                                            resultSet.getDate("booking_date"),
+                                            resultSet.getInt("price")));
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -226,5 +253,24 @@ public class Database {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    public void addPriceToBookingByID(int priceToAdd, int bookingID){
+        int currentPrice = 0;
+        try{
+            statement = conn.prepareStatement("SELECT price FROM booking WHERE id = ?");
+            statement.setInt(1, bookingID);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                currentPrice = resultSet.getInt("price");
+            }
+
+            int newPrice = currentPrice + priceToAdd;
+
+            statement = conn.prepareStatement("UPDATE booking SET price = ? WHERE id = ?");
+            statement.setInt(1, newPrice);
+            statement.setInt(2, bookingID);
+            statement.executeUpdate();
+        }catch (Exception ex){ex.printStackTrace();}
     }
 }

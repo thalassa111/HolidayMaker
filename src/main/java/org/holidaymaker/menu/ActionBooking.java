@@ -26,7 +26,10 @@ public class ActionBooking implements MenuAction {
                 db.createNewBookingCustomer(customer.id(), newBookingId);
             }
             System.out.println("hejsan svejsan");
+            int currentActivityPrice = 0;
             for (Activity activity: Activities){
+                currentActivityPrice = Database.getInstance().getPriceOfActivityByID(activity.getId());
+                Database.getInstance().addPriceToBookingByID(currentActivityPrice, newBookingId);
                 db.createNewBookingActivity(newBookingId, activity.getId());
             }
 
