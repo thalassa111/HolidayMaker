@@ -9,17 +9,11 @@ import org.holidaymaker.database.TravelPackage;
 public class MenuHandler {
     Scanner scanner = new Scanner(System.in);
     private Map<Integer, MenuAction> menuOptions = new HashMap<>();
-    private Activities activities;
-    private TravelPackage travelPackage;
-
     public MenuHandler() {
-        this.activities = new Activities();
-        this.travelPackage = new TravelPackage();
-
         // Add new menu items here
         menuOptions.put(1, new ActionAddCustomer());
         menuOptions.put(2, new ActionListCustomer());
-        menuOptions.put(3, new ActionListActivities(activities, travelPackage));
+        menuOptions.put(3, new ActionListActivities());
         menuOptions.put(4, new ActionRemoveCustomer());
         menuOptions.put(5, new ActionBooking());
         menuOptions.put(6, new ActionCheckBookings());
