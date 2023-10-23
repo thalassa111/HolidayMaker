@@ -121,15 +121,50 @@ public class Database {
         return activitiesList;
     }
 
-    public int findActivityById(int id) {
+    public ArrayList<User> findUserById(int id) {
+        ArrayList<User> tempList = new ArrayList<User>();
         try {
-            statement = conn.prepareStatement("SELECT * FROM activity WHERE id = ?");
-            resultSet = statement.executeQuery();
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM customer WHERE id = ?");
+            statement.setInt(1, id); // Set the value for the parameter in the SQL query
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                tempList.add(new User(
+                        Integer.parseInt(resultSet.getString("id")),
+                        resultSet.getString("name"),
+                        resultSet.getString("type"),
+                        resultSet.getString("email")
+                ));
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return id;
+        return tempList;
     }
+
+    public ArrayList<Activity> findActivityById(int id) {
+        ArrayList<Activity> tempList = new ArrayList<>();
+        try {
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM activity WHERE id = ?");
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                tempList.add(new Activity(
+                        resultSet.getInt("id"),
+                        resultSet.getString("activity_name"),
+                        resultSet.getDate("activity_date"),
+                        resultSet.getString("location"),
+                        resultSet.getInt("price"),
+                        resultSet.getString("description")
+                ));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return tempList;
+    }
+
 
     void getAllBookings() {
         try {
@@ -154,10 +189,39 @@ public class Database {
         return BookingList;
     }
 
-    public void createNewBooking(Date date) {
+    public int createNewBooking(Date date) {
+        int generatedId = -1;
+
         try {
-            statement = conn.prepareStatement("INSERT INTO booking SET booking_date = ?");
+            statement = conn.prepareStatement("INSERT INTO booking SET booking_date = ?", statement.RETURN_GENERATED_KEYS);
             statement.setDate(1, date);
+            statement.executeUpdate();
+
+            ResultSet generatedKeys = statement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                generatedId = generatedKeys.getInt(1); // Assuming the primary key is an integer.
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return generatedId;
+    }
+
+    public void createNewBookingCustomer(int customerId, int bookingId) {
+        try {
+            statement = conn.prepareStatement("INSERT INTO bookingCustomers SET customer_ID = ?, booking_ID = ?");
+            statement.setInt(1, customerId);
+            statement.setInt(2, bookingId);
+            statement.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    public void createNewBookingActivity(int bookingId ,int activityId) {
+        try {
+            statement = conn.prepareStatement("INSERT INTO bookingActivities SET booking_ID = ?, activity_ID = ?");
+            statement.setInt(1, bookingId);
+            statement.setInt(2, activityId);
             statement.executeUpdate();
         } catch (Exception ex) {
             ex.printStackTrace();
