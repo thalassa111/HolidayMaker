@@ -82,10 +82,6 @@ public class ActionBooking implements MenuAction {
         return selectedCustomers;
     }
 
-    private void CreateBookingCustomer(){
-
-    }
-
     public void testData(Scanner tester) {
         System.out.print("Name: ");
         String name = tester.nextLine();
