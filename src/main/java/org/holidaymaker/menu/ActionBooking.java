@@ -42,7 +42,7 @@ public class ActionBooking implements MenuAction {
         activitiesUtils.printAllActivities();
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Choose user or exit '0'");
+        System.out.println("Choose activity or exit '0'");
 
         int userInput;
         while ((userInput = scanner.nextInt()) != 0) {
