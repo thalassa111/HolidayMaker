@@ -3,6 +3,7 @@ package org.holidaymaker.menu;
 import org.holidaymaker.database.*;
 
 import java.sql.Date;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -12,33 +13,54 @@ public class ActionBooking implements MenuAction {
         Database db = Database.getInstance();
 
         ArrayList<User> Customers;
-        ArrayList<Activity> Activities = new ArrayList<Activity>();
+        ArrayList<Activity> Activities;
 
+        Activities = selectActivities();
         Customers = selectCustomers();
-        /*Activities = selectActivities();*/
 
-        if (!Customers.isEmpty()) {
+        if (!Customers.isEmpty() && !Activities.isEmpty()) {
             Date currentDate = new Date(System.currentTimeMillis());
             int newBookingId = db.createNewBooking(currentDate);
 
             for (User customer : Customers) {
                 db.createNewBookingCustomer(customer.id(), newBookingId);
             }
+            System.out.println("hejsan svejsan");
+            for (Activity activity: Activities){
+                db.createNewBookingActivity(newBookingId, activity.getId());
+            }
+
         }
     }
 
     private ArrayList<Activity> selectActivities() {
         Database db = Database.getInstance();
+        ArrayList<Activity> selectedActivities = new ArrayList<>();
 
         System.out.println("Activities:");
-        Activities activities = new Activities();
-        activities.printAllActivities();
+        Activities activitiesUtils = new Activities();
+        activitiesUtils.printAllActivities();
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Choose activity: ");
+        System.out.println("Choose user or exit '0'");
 
-        System.out.println("Chosen activity: " + db.findActivityById(scanner.nextInt()));
-        return db.findActivityById(scanner.nextInt());
+        int userInput;
+        while ((userInput = scanner.nextInt()) != 0) {
+            ArrayList<Activity> foundActivities = db.findActivityById(userInput);
+            if (!foundActivities.isEmpty()) {
+                selectedActivities.addAll(foundActivities);
+                System.out.println("Chosen User: " + foundActivities.get(0) +"\nChoose another user or exit '0'");
+            } else {
+                System.out.println("No user found for ID: " + userInput);
+            }
+        }
+
+        System.out.println("Chosen Users: ");
+        for (Activity selectedActivity : selectedActivities) {
+            System.out.println(selectedActivity);
+        }
+
+        return selectedActivities;
     }
 
     private ArrayList<User> selectCustomers() {
@@ -59,7 +81,7 @@ public class ActionBooking implements MenuAction {
             ArrayList<User> foundUsers = db.findUserById(userInput);
             if (!foundUsers.isEmpty()) {
                 selectedCustomers.addAll(foundUsers);
-                System.out.println("Chosen User: " + foundUsers.get(0));
+                System.out.println("Chosen User: " + foundUsers.get(0) +"\nChoose another user or exit '0'");
             } else {
                 System.out.println("No user found for ID: " + userInput);
             }

@@ -209,4 +209,14 @@ public class Database {
             ex.printStackTrace();
         }
     }
+    public void createNewBookingActivity(int bookingId ,int activityId) {
+        try {
+            statement = conn.prepareStatement("INSERT INTO bookingActivities SET booking_ID = ?, activity_ID = ?");
+            statement.setInt(1, bookingId);
+            statement.setInt(2, activityId);
+            statement.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }
