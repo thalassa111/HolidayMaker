@@ -14,7 +14,7 @@ public class ActionBooking implements MenuAction {
         int selectedCostumer = 0;
         int selectedActivity = 0;
 
-        selectCostumer();
+        ArrayList<User> customer = selectCustomer();
         selectActivity();
 
         if (selectedCostumer != 0){
@@ -25,7 +25,7 @@ public class ActionBooking implements MenuAction {
 
     }
 
-    private int selectCostumer() {
+    private ArrayList<User> selectCustomer() {
         Database db = Database.getInstance();
 
         System.out.println("Users:");
@@ -33,21 +33,10 @@ public class ActionBooking implements MenuAction {
         users.printAllUsers();
 
         Scanner scanner = new Scanner(System.in);
-        String choice = "";
-        while (!db.listOfAllUsers().contains(Integer.parseInt(choice))) {
-            System.out.println("Choose a User: ");
-            choice = scanner.nextLine();
-            if (db.listOfAllUsers().contains(Integer.parseInt(choice))) {
-                System.out.println("User with ID: " + choice + " Found!");
-                break;
-            } else {
-                System.out.println("Invalid Input");
-            }
-        }
-        scanner.close();
+        System.out.println("Choose user: ");
 
-        int userId = Integer.parseInt(choice);
-        return userId;
+        System.out.println("Chosen User: " + db.findUserById(scanner.nextInt()));
+        return db.findUserById(scanner.nextInt());
     }
 
     private int selectActivity() {
@@ -56,7 +45,6 @@ public class ActionBooking implements MenuAction {
         System.out.println("Activities:");
         Activities activities = new Activities();
         activities.printAllActivities();
-
         Scanner scanner = new Scanner(System.in);
         String choice;
         while (true) {

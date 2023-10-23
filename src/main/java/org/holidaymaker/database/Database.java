@@ -113,15 +113,27 @@ public class Database {
         return activitiesList;
     }
 
-    public int findActivityById(int id) {
+    public ArrayList<User> findUserById(int id) {
+        ArrayList<User> tempList = new ArrayList<User>();
         try {
-            statement = conn.prepareStatement("SELECT * FROM activity WHERE id = ?");
-            resultSet = statement.executeQuery();
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM customer WHERE id = ?");
+            statement.setInt(1, id); // Set the value for the parameter in the SQL query
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                tempList.add(new User(
+                        Integer.parseInt(resultSet.getString("id")),
+                        resultSet.getString("name"),
+                        resultSet.getString("type"),
+                        resultSet.getString("email")
+                ));
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return id;
+        return tempList;
     }
+
 
     void getAllBookings() {
         try {
