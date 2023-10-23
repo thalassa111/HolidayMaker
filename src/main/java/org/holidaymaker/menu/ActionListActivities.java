@@ -8,9 +8,9 @@ public class ActionListActivities implements MenuAction {
     private Activities activities;
     private TravelPackage travelPackage;
 
-    public ActionListActivities(Activities activities, TravelPackage travelPackage) {
-        this.activities = activities;
-        this.travelPackage = travelPackage;
+    public ActionListActivities() {
+        this.activities = new Activities();
+        this.travelPackage = new TravelPackage();
     }
 
     @Override
