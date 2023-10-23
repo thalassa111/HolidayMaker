@@ -134,6 +134,29 @@ public class Database {
         return tempList;
     }
 
+    public ArrayList<Activity> findActivityById(int id) {
+        ArrayList<Activity> tempList = new ArrayList<>();
+        try {
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM activity WHERE id = ?");
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                tempList.add(new Activity(
+                        resultSet.getInt("id"),
+                        resultSet.getString("activity_name"),
+                        resultSet.getDate("activity_date"),
+                        resultSet.getString("location"),
+                        resultSet.getInt("price"),
+                        resultSet.getString("description")
+                ));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return tempList;
+    }
+
 
     void getAllBookings() {
         try {

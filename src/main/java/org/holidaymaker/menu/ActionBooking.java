@@ -23,27 +23,18 @@ public class ActionBooking implements MenuAction {
         }
     }
 
-    private int selectActivities() {
+    private ArrayList<Activity> selectActivities() {
         Database db = Database.getInstance();
 
         System.out.println("Activities:");
         Activities activities = new Activities();
         activities.printAllActivities();
-        Scanner scanner = new Scanner(System.in);
-        String choice;
-        while (true) {
-            System.out.println("Choose an Activity: ");
-            choice = scanner.nextLine();
-            if (db.listOfAllActivities().contains("id=" + choice)) {
-                System.out.println("Invalid input");
-            } else {
-                break;
-            }
-        }
-        scanner.close();
 
-        int activityId = Integer.parseInt(choice);
-        return activityId;
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Choose activity: ");
+
+        System.out.println("Chosen activity: " + db.findActivityById(scanner.nextInt()));
+        return db.findActivityById(scanner.nextInt());
     }
 
     private ArrayList<User> selectCustomers() {
