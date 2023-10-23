@@ -10,36 +10,20 @@ public class ActionBooking implements MenuAction {
     @Override
     public void executeAction() {
 
+        ArrayList<User> Costumers = new ArrayList<User>();
+        ArrayList<Activity> Activities = new ArrayList<Activity>();
 
-        int selectedCostumer = 0;
-        int selectedActivity = 0;
+        Costumers = selectCustomers();
+        Activities = selectActivities();
 
-        ArrayList<User> customer = selectCustomer();
-        selectActivity();
-
-        if (selectedCostumer != 0){
+        if (!Costumers.isEmpty()){
             Database db = Database.getInstance();
             Date currentDate = new Date(System.currentTimeMillis());
             db.createNewBooking(currentDate);
         }
-
     }
 
-    private ArrayList<User> selectCustomer() {
-        Database db = Database.getInstance();
-
-        System.out.println("Users:");
-        Users users = new Users();
-        users.printAllUsers();
-
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Choose user: ");
-
-        System.out.println("Chosen User: " + db.findUserById(scanner.nextInt()));
-        return db.findUserById(scanner.nextInt());
-    }
-
-    private int selectActivity() {
+    private int selectActivities() {
         Database db = Database.getInstance();
 
         System.out.println("Activities:");
@@ -60,6 +44,20 @@ public class ActionBooking implements MenuAction {
 
         int activityId = Integer.parseInt(choice);
         return activityId;
+    }
+
+    private ArrayList<User> selectCustomers() {
+        Database db = Database.getInstance();
+
+        System.out.println("Users:");
+        Users users = new Users();
+        users.printAllUsers();
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Choose user: ");
+
+        System.out.println("Chosen User: " + db.findUserById(scanner.nextInt()));
+        return db.findUserById(scanner.nextInt());
     }
 
     public void testData(Scanner tester) {
