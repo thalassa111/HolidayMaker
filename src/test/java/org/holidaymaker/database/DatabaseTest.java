@@ -2,6 +2,7 @@ package org.holidaymaker.database;
 
 import org.junit.jupiter.api.Test;
 
+import javax.xml.crypto.Data;
 import java.awt.print.Book;
 import java.sql.Connection;
 import java.sql.Date;
@@ -91,5 +92,28 @@ class DatabaseTest {
                 inDb =  true;
         }
         assertFalse(inDb);
+    }
+
+    //check if the price is right, test is checking with first activity
+    @Test
+    void getPriceOfActivityByID() {
+        int price = Database.getInstance().getPriceOfActivityByID(1);
+        assertEquals(4999,price);
+    }
+
+    //tries to update price of the booking by adding 1000 and then checking the result
+    @Test
+    void addPriceToBookingByID() {
+        Connection conn = null;
+        Database dbInstance = Database.getInstance();
+        //connect to a test schema instead of real one
+        conn = dbInstance.connectToDb("jdbc:mysql://161.97.144.27:8010/test?user=root&password=helpingfindinginnings");
+        dbInstance.setConn(conn);
+        int priceToAdd = 1000;
+        int currentPrice = Database.getInstance().getPriceOfBookingByID(1);
+        Database.getInstance().addPriceToBookingByID(priceToAdd, 1);
+        int updatedPrice = Database.getInstance().getPriceOfBookingByID(1);
+        int expectedPrice = currentPrice + priceToAdd;
+        assertEquals(expectedPrice,updatedPrice);
     }
 }
