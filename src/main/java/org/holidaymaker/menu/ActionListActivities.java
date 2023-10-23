@@ -21,6 +21,6 @@ public class ActionListActivities implements MenuAction {
         System.out.println("\nList of Travel Packages:");
         travelPackage.createTravelPackage(activities, 1, 2, 3);
         travelPackage.createTravelPackage(activities, 4, 5, 6);
-        travelPackage.createTravelPackage(activities, 7, 8);
+        travelPackage.createTravelPackage(activities,  8);
     }
 }
