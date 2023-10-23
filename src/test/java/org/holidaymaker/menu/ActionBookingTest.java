@@ -31,7 +31,7 @@ class ActionBookingTest {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         System.setOut(new PrintStream(output));
 
-        ActionBookingTest.(scanner);
+        //ActionBookingTest.(scanner);
 
         String expectedOutput = "";
         assertEquals(expectedOutput, output.toString());

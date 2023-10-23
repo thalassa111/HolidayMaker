@@ -70,6 +70,14 @@ public class Database {
         }catch (Exception ex){ex.printStackTrace();}
     }
 
+    public void deleteBookingByID(int bookingID){
+        try{
+            statement = conn.prepareStatement("DELETE FROM booking WHERE id = ?");
+            statement.setInt(1,bookingID);
+            statement.executeUpdate();
+        }catch (Exception ex){ex.printStackTrace();}
+    }
+
     public ArrayList<User> listOfAllUsers(){
         getAllUsers();
         ArrayList<User> tempList = new ArrayList<User>();

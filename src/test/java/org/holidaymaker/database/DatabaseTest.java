@@ -2,7 +2,9 @@ package org.holidaymaker.database;
 
 import org.junit.jupiter.api.Test;
 
+import java.awt.print.Book;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -70,6 +72,22 @@ class DatabaseTest {
         ArrayList<User> tmpList = Database.getInstance().listOfAllUsers();
         for (int i = 0; i < tmpList.size(); i++) {
             if(lastID == tmpList.get(i).id())
+                inDb =  true;
+        }
+        assertFalse(inDb);
+    }
+
+    //basically the same as above, but trying against booking
+    @Test
+    void deleteBookingByID() {
+        Database.getInstance().createNewBooking(Date.valueOf("2023-10-23"));
+        Bookings bookings = new Bookings();
+        int lastID = bookings.getLastBookingsID();
+        boolean inDb = false;
+        Database.getInstance().deleteBookingByID(lastID);
+        ArrayList<Booking> tmpList = Database.getInstance().ListOfAllBookings();
+        for (int i = 0; i < tmpList.size(); i++) {
+            if(lastID == tmpList.get(i).getId())
                 inDb =  true;
         }
         assertFalse(inDb);
