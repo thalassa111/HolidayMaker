@@ -20,10 +20,8 @@ public class Booking {
 
     @Override
     public String toString() {
-        return "Activity{" +
-                "id=" + id +
-                ", date=" + date +
-                ", price=" + price +
-                '}';
+        return  "ID: " + id +
+                " | Date: " + date +
+                " | price: " + price;
     }
 }

@@ -18,7 +18,7 @@ public class ActionCheckBookings implements MenuAction{
         scanner = new Scanner(System.in);
         int choice;
         do {
-            System.out.println("What would you like to do?");
+            System.out.println("\nWhat would you like to do?\n");
             System.out.println("1. Remove booking");
             /*System.out.println("2. Edit booking");*/
             System.out.println("0. Back");
