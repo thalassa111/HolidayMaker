@@ -100,7 +100,6 @@ public class ActionBooking implements MenuAction {
             System.out.println(selectedCustomer);
 
         }
-
         return selectedCustomers;
     }
 
