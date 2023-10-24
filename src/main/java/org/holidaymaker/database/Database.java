@@ -33,6 +33,63 @@ public class Database {
         return instance;
     }
 
+    public void createNewActivity(String activity_name, String activity_date, String location, double price, String description){
+        try {
+            statement = conn.prepareStatement("INSERT INTO activity (activity_name, activity_date, location, price, description) VALUES (?, ?, ?, ?, ?)");
+            statement.setString(1, activity_name);
+            statement.setString(2, activity_date);
+            statement.setString(3, location);
+            statement.setDouble(4, price);
+            statement.setString(5, description);
+            statement.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }  
+
+    public void removeActivityById(int id) {
+        try {
+            statement = conn.prepareStatement("DELETE FROM activity WHERE id = ?");
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public Activity getActivityByName(String activityName) {
+        try {
+            statement = conn.prepareStatement("SELECT * FROM activity WHERE activity_name = ?");
+            statement.setString(1, activityName);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return new Activity(Integer.parseInt(resultSet.getString("id")),
+                        resultSet.getString("activity_name"),
+                        resultSet.getDate("activity_date"),
+                        resultSet.getString("location"),
+                        resultSet.getInt("Price"),
+                        resultSet.getString("Description"));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    public int getLatestActivityId() {
+    int latestId = 0;
+    try {
+        statement = conn.prepareStatement("SELECT MAX(id) FROM activity");
+        resultSet = statement.executeQuery();
+        if (resultSet.next()) {
+            latestId = resultSet.getInt(1);
+        }
+    } catch (Exception ex) {
+        ex.printStackTrace();
+    }
+    return latestId;
+    }
+
     Connection connectToDb(String dbUrl){
         try {
             return DriverManager.getConnection(dbUrl);
