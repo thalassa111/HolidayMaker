@@ -34,13 +34,11 @@ public class Activity {
 
     @Override
     public String toString() {
-        return "Activity{" +
-                "id=" + id +
-                ", activityName='" + activityName + '\'' +
-                ", date=" + date +
-                ", location=" + location+
-                ", price=" + price +
-                ", description='" + description + '\'' +
-                '}';
+        return  "ID: " + id +
+                " | Activity: " + activityName  +
+                " | Date: " + date +
+                " | Location: " + location+
+                " | Price: " + price +
+                " | Description: " + description;
     }
 }

@@ -19,7 +19,7 @@ public class Activities {
 
     public void printAllActivities(){
         for (int i = 0; i < this.list.size(); i++) {
-            System.out.println(this.list.get(i).toString());
+            System.out.println(this.list.get(i).toString() + "\n");
         }
     }
     public ArrayList<Activity> getActivitiesByIds(int... ids) {
