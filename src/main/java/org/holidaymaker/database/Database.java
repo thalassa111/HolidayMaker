@@ -13,6 +13,10 @@ public class Database {
     PreparedStatement statement;
     Connection conn = null;
 
+    public Connection getConn() {
+        return conn;
+    }
+
     public void setConn(Connection conn) {
         this.conn = conn;
     }
@@ -356,21 +360,9 @@ public class Database {
                 ex.printStackTrace();
             }
     }
-    public String getActivityLocationByID(int activityID){
-        String location = "";
-        try {
-            statement = conn.prepareStatement("SELECT location FROM activity WHERE id = ?");
-            statement.setInt(1, activityID);
-            resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                location = resultSet.getString("location");
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return location;
-    }
 
+    //returns a list of locations matching with the string sent in, in this case another location from
+    //activity
     public ArrayList<Accommodation> getListOfMatchingLocation(String inLocation){
         ArrayList<Accommodation> accommodationList = new ArrayList<>();
         try{
@@ -404,5 +396,4 @@ public class Database {
             ex.printStackTrace();
         }
     }
-
 }

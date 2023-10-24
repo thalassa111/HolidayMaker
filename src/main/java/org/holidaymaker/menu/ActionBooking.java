@@ -54,7 +54,8 @@ public class ActionBooking implements MenuAction {
                     System.out.println("");
                     System.out.println("Accommondation:");
                     //only get accommodations matching location
-                    String activityLocation = Database.getInstance().getActivityLocationByID(activity.getId());
+                    String activityLocation = activity.getLocation();
+                    //wants a list of all accommodations matching the location
                     ArrayList<Accommodation> accommodationList = Database.getInstance().getListOfMatchingLocation(activityLocation);
                     //prints out list of all matching accommodations
                     for (int i = 0; i < accommodationList.size(); i++) {
