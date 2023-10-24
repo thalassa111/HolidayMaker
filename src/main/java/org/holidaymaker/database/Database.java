@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Date;
 import java.util.ArrayList;
 
 public class Database {
@@ -12,33 +13,24 @@ public class Database {
     PreparedStatement statement;
     Connection conn = null;
 
+    public void setConn(Connection conn) {
+        this.conn = conn;
+    }
+
     public Database(){
-        connectToDb();
+        this.conn = connectToDb("jdbc:mysql://161.97.144.27:8010/holidayHomes?user=root&password=helpingfindinginnings");
     }
 
     //use this to get the only instance of the database, if there isnt one, one will be created.
-    public static Database getInstance(){
-        if(instance == null){
-            synchronized (Database.class){
-                if(instance == null){
+    public static Database getInstance() {
+        if (instance == null) {
+            synchronized (Database.class) {
+                if (instance == null) {
                     instance = new Database();
                 }
             }
         }
         return instance;
-    }
-
-    void connectToDb(){
-        try {
-            conn = DriverManager.getConnection("jdbc:mysql://161.97.144.27:8010/holidayHomes?user=root&password=helpingfindinginnings");
-        } catch (Exception ex) { ex.printStackTrace(); }
-    }
-
-    void getAllUsers(){
-        try {
-            statement = conn.prepareStatement("SELECT * FROM customer");
-            resultSet = statement.executeQuery();
-        } catch (Exception ex) { ex.printStackTrace(); }
     }
 
     public void createNewActivity(String activity_name, String activity_date, String location, double price, String description){
@@ -53,16 +45,94 @@ public class Database {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }    
+    }  
 
-    public void createNewUser(String name, String type, String email){
+    public void removeActivityById(int id) {
+        try {
+            statement = conn.prepareStatement("DELETE FROM activity WHERE id = ?");
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public Activity getActivityByName(String activityName) {
+        try {
+            statement = conn.prepareStatement("SELECT * FROM activity WHERE activity_name = ?");
+            statement.setString(1, activityName);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return new Activity(Integer.parseInt(resultSet.getString("id")),
+                        resultSet.getString("activity_name"),
+                        resultSet.getDate("activity_date"),
+                        resultSet.getString("location"),
+                        resultSet.getInt("Price"),
+                        resultSet.getString("Description"));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    public int getLatestActivityId() {
+    int latestId = 0;
+    try {
+        statement = conn.prepareStatement("SELECT MAX(id) FROM activity");
+        resultSet = statement.executeQuery();
+        if (resultSet.next()) {
+            latestId = resultSet.getInt(1);
+        }
+    } catch (Exception ex) {
+        ex.printStackTrace();
+    }
+    return latestId;
+    }
+
+    Connection connectToDb(String dbUrl){
+        try {
+            return DriverManager.getConnection(dbUrl);
+        } catch (Exception ex) { ex.printStackTrace(); }
+        return null;
+    }
+
+    void getAllUsers() {
+        try {
+            statement = conn.prepareStatement("SELECT * FROM customer");
+            resultSet = statement.executeQuery();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
+    public void createNewUser(String name, String type, String email) {
         try {
             statement = conn.prepareStatement("INSERT INTO customer SET name = ?, type = ?, email = ?");
-            statement.setString(1,name);
-            statement.setString(2,type);
-            statement.setString(3,email);
+            statement.setString(1, name);
+            statement.setString(2, type);
+            statement.setString(3, email);
             statement.executeUpdate();
-        } catch (Exception ex) { ex.printStackTrace(); }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void deleteUserByID(int customerID){
+        try{
+            statement = conn.prepareStatement("DELETE FROM customer WHERE id = ?");
+            statement.setInt(1,customerID);
+            statement.executeUpdate();
+        }catch (Exception ex){ex.printStackTrace();}
+    }
+
+    public void deleteBookingByID(int bookingID){
+        try{
+            statement = conn.prepareStatement("DELETE FROM booking WHERE id = ?");
+            statement.setInt(1,bookingID);
+            statement.executeUpdate();
+        }catch (Exception ex){ex.printStackTrace();}
     }
 
     public ArrayList<User> listOfAllUsers(){
@@ -75,8 +145,36 @@ public class Database {
                         resultSet.getString("type"),
                         resultSet.getString("email")));
             }
-        } catch (Exception ex){ ex.printStackTrace(); }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         return tempList;
+    }
+
+    public int getPriceOfActivityByID(int activityID){
+        int price = 0;
+        try{
+            statement = conn.prepareStatement("SELECT * FROM activity WHERE id = ?");
+            statement.setInt(1,activityID);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                price = resultSet.getInt("price");
+            }
+        }catch (Exception ex){ex.printStackTrace();}
+        return price;
+    }
+
+    public int getPriceOfBookingByID(int bookingID){
+        int price = 0;
+        try{
+            statement = conn.prepareStatement("SELECT * FROM booking WHERE id = ?");
+            statement.setInt(1,bookingID);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                price = resultSet.getInt("price");
+            }
+        }catch (Exception ex){ex.printStackTrace();}
+        return price;
     }
 
     void getAllActivities() {
@@ -87,49 +185,6 @@ public class Database {
             ex.printStackTrace();
         }
     }
-
-public Activity getActivityByName(String activityName) {
-    try {
-        statement = conn.prepareStatement("SELECT * FROM activity WHERE activity_name = ?");
-        statement.setString(1, activityName);
-        resultSet = statement.executeQuery();
-        if (resultSet.next()) {
-            return new Activity(Integer.parseInt(resultSet.getString("id")),
-                    resultSet.getString("activity_name"),
-                    resultSet.getDate("activity_date"),
-                    resultSet.getString("location"),
-                    resultSet.getInt("Price"),
-                    resultSet.getString("Description"));
-        }
-    } catch (Exception ex) {
-        ex.printStackTrace();
-    }
-    return null;
-}
-
-public void removeActivityById(int id) {
-    try {
-        statement = conn.prepareStatement("DELETE FROM activity WHERE id = ?");
-        statement.setInt(1, id);
-        statement.executeUpdate();
-    } catch (Exception ex) {
-        ex.printStackTrace();
-    }
-}
-
-public int getLatestActivityId() {
-    int latestId = 0;
-    try {
-        statement = conn.prepareStatement("SELECT MAX(id) FROM activity");
-        resultSet = statement.executeQuery();
-        if (resultSet.next()) {
-            latestId = resultSet.getInt(1);
-        }
-    } catch (Exception ex) {
-        ex.printStackTrace();
-    }
-    return latestId;
-}
 
     public ArrayList<Activity> listOfAllActivities() {
         getAllActivities();
@@ -147,5 +202,132 @@ public int getLatestActivityId() {
             ex.printStackTrace();
         }
         return activitiesList;
+    }
+
+    public ArrayList<User> findUserById(int id) {
+        ArrayList<User> tempList = new ArrayList<User>();
+        try {
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM customer WHERE id = ?");
+            statement.setInt(1, id); // Set the value for the parameter in the SQL query
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                tempList.add(new User(
+                        Integer.parseInt(resultSet.getString("id")),
+                        resultSet.getString("name"),
+                        resultSet.getString("type"),
+                        resultSet.getString("email")
+                ));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return tempList;
+    }
+
+    public ArrayList<Activity> findActivityById(int id) {
+        ArrayList<Activity> tempList = new ArrayList<>();
+        try {
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM activity WHERE id = ?");
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                tempList.add(new Activity(
+                        resultSet.getInt("id"),
+                        resultSet.getString("activity_name"),
+                        resultSet.getDate("activity_date"),
+                        resultSet.getString("location"),
+                        resultSet.getInt("price"),
+                        resultSet.getString("description")
+                ));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return tempList;
+    }
+
+
+    void getAllBookings() {
+        try {
+            statement = conn.prepareStatement("SELECT * FROM booking");
+            resultSet = statement.executeQuery();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public ArrayList<Booking> ListOfAllBookings() {
+        getAllBookings();
+        ArrayList<Booking> BookingList = new ArrayList<Booking>();
+        try {
+            while (resultSet.next()) {
+                BookingList.add(new Booking(Integer.parseInt(resultSet.getString("id")),
+                                            resultSet.getDate("booking_date"),
+                                            resultSet.getInt("price")));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return BookingList;
+    }
+
+    public int createNewBooking(Date date) {
+        int generatedId = -1;
+
+        try {
+            statement = conn.prepareStatement("INSERT INTO booking SET booking_date = ?", statement.RETURN_GENERATED_KEYS);
+            statement.setDate(1, date);
+            statement.executeUpdate();
+
+            ResultSet generatedKeys = statement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                generatedId = generatedKeys.getInt(1); // Assuming the primary key is an integer.
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return generatedId;
+    }
+
+    public void createNewBookingCustomer(int customerId, int bookingId) {
+        try {
+            statement = conn.prepareStatement("INSERT INTO bookingCustomers SET customer_ID = ?, booking_ID = ?");
+            statement.setInt(1, customerId);
+            statement.setInt(2, bookingId);
+            statement.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    public void createNewBookingActivity(int bookingId ,int activityId) {
+        try {
+            statement = conn.prepareStatement("INSERT INTO bookingActivities SET booking_ID = ?, activity_ID = ?");
+            statement.setInt(1, bookingId);
+            statement.setInt(2, activityId);
+            statement.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void addPriceToBookingByID(int priceToAdd, int bookingID){
+        int currentPrice = 0;
+        try{
+            statement = conn.prepareStatement("SELECT price FROM booking WHERE id = ?");
+            statement.setInt(1, bookingID);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                currentPrice = resultSet.getInt("price");
+            }
+
+            int newPrice = currentPrice + priceToAdd;
+
+            statement = conn.prepareStatement("UPDATE booking SET price = ? WHERE id = ?");
+            statement.setInt(1, newPrice);
+            statement.setInt(2, bookingID);
+            statement.executeUpdate();
+        }catch (Exception ex){ex.printStackTrace();}
     }
 }

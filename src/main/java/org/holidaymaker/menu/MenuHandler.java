@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-import org.holidaymaker.database.Activity;
-
 public class MenuHandler {
     Scanner scanner = new Scanner(System.in);
     private Map<Integer, MenuAction> menuOptions = new HashMap<>();
@@ -14,6 +12,9 @@ public class MenuHandler {
     public MenuHandler(){
         menuOptions.put(1, new ActionAddCustomer());
         menuOptions.put(2, new ActivitySubMenu());
+        menuOptions.put(3, new ActionListCustomer());
+        menuOptions.put(4, new ActionBooking());
+        menuOptions.put(5, new ActionCheckBookings());
     }
 
     public void displayMenu(){
@@ -21,6 +22,9 @@ public class MenuHandler {
             System.out.println("Menu");
             System.out.println("1. add customer");
             System.out.println("2. activities");
+            System.out.println("3. list customer");
+            System.out.println("4. Add Booking");
+            System.out.println("5. Check Bookings");
             System.out.println("0. Exit system");
             int choice = scanner.nextInt();
 
