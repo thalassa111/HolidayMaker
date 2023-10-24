@@ -31,11 +31,9 @@ public class User {
 
     @Override
     public String toString() {
-        return "Customer{" +
-                "id=" + id +
-                ", name='" + name +
-                ", type='" + type +
-                ", email='" + email +
-                '}';
+        return  "ID: " + id +
+                " | Name: " + name +
+                " | Type: " + type +
+                " | Email: " + email;
     }
 }
