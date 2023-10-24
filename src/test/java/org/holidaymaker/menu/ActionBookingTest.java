@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.sql.Connection;
 import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -47,5 +48,15 @@ class ActionBookingTest {
         System.out.print("Adding customer:" + " Name = " + name + " Email = " + email + " Type = " + type);
         Database db = Database.getInstance();
         db.createNewUser(name, type, email);
+    }
+
+    @Test
+    void addAccommodation() {
+    }
+
+    private void setConnectionToTestDb(){
+        //connect to a test schema instead of real one
+        Connection conn = Database.getInstance().connectToDb("jdbc:mysql://161.97.144.27:8010/test?user=root&password=helpingfindinginnings");;
+        Database.getInstance().setConn(conn);
     }
 }

@@ -13,6 +13,10 @@ public class Database {
     PreparedStatement statement;
     Connection conn = null;
 
+    public Connection getConn() {
+        return conn;
+    }
+
     public void setConn(Connection conn) {
         this.conn = conn;
     }
@@ -90,7 +94,7 @@ public class Database {
     return latestId;
     }
 
-    Connection connectToDb(String dbUrl){
+    public Connection connectToDb(String dbUrl){
         try {
             return DriverManager.getConnection(dbUrl);
         } catch (Exception ex) { ex.printStackTrace(); }
@@ -156,6 +160,19 @@ public class Database {
         try{
             statement = conn.prepareStatement("SELECT * FROM activity WHERE id = ?");
             statement.setInt(1,activityID);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                price = resultSet.getInt("price");
+            }
+        }catch (Exception ex){ex.printStackTrace();}
+        return price;
+    }
+
+    public int getPriceOfAccommodationByID(int accommodationID){
+        int price = 0;
+        try{
+            statement = conn.prepareStatement("SELECT * FROM accommodation WHERE id = ?");
+            statement.setInt(1,accommodationID);
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 price = resultSet.getInt("price");
@@ -329,5 +346,67 @@ public class Database {
             statement.setInt(2, bookingID);
             statement.executeUpdate();
         }catch (Exception ex){ex.printStackTrace();}
+    }
+
+    public ArrayList<Accommodation> listOfAllAccommodations() {
+        getAllAccommodations();
+        ArrayList<Accommodation> accommodationList = new ArrayList<>();
+        try {
+            while (resultSet.next()) {
+                accommodationList.add(new Accommodation(Integer.parseInt(resultSet.getString("id")),
+                        resultSet.getString("accommodation_name"),
+                        resultSet.getDate("accommodation_date"),
+                        resultSet.getString("location"),
+                        resultSet.getInt("Price")));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return accommodationList;
+    }
+
+    private void getAllAccommodations() {
+            try {
+                statement = conn.prepareStatement("SELECT * FROM accommodation");
+                resultSet = statement.executeQuery();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+    }
+
+    //returns a list of locations matching with the string sent in, in this case another location from
+    //activity
+    public ArrayList<Accommodation> getListOfMatchingLocation(String inLocation){
+        ArrayList<Accommodation> accommodationList = new ArrayList<>();
+        try{
+            statement = conn.prepareStatement("SELECT * FROM accommodation WHERE location = ?");
+            statement.setString(1, inLocation);
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                int accommodationID = resultSet.getInt("id");
+                String name = resultSet.getString("accommodation_name");
+                Date date = resultSet.getDate("accommodation_date");
+                String location = resultSet.getString("location");
+                int price = resultSet.getInt("price");
+                Accommodation accommodation = new Accommodation(accommodationID, name, date, location, price);
+                accommodationList.add(accommodation);
+            }
+
+        }catch(Exception ex) {
+            ex.printStackTrace();
+        }
+        return accommodationList;
+    }
+
+    public void createNewBookingAccommodation(int accommodationID, int bookingId) {
+        try {
+            statement = conn.prepareStatement("INSERT INTO bookingAccommodation SET accommodation_ID = ?, booking_ID = ?");
+            statement.setInt(1, accommodationID);
+            statement.setInt(2, bookingId);
+            statement.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

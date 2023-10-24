@@ -26,16 +26,21 @@ public class MenuHandler {
             System.out.println("4. Add Booking");
             System.out.println("5. Check Bookings");
             System.out.println("0. Exit system");
-            int choice = scanner.nextInt();
 
-            //will run the method executeAction depending on the choice picked earlier
-            if(menuOptions.containsKey(choice)) {
-                menuOptions.get(choice).executeAction();
-            } else if(choice == 0) {
-                System.out.println("Exiting system...");
-                System.exit(0);
-            } else {
-                System.out.println("Invalid choice, pick again!");
+            try {
+                int choice = scanner.nextInt();
+
+                if (menuOptions.containsKey(choice)) {
+                    menuOptions.get(choice).executeAction();
+                } else if (choice == 0) {
+                    System.out.println("Exiting system...");
+                    System.exit(0);
+                } else {
+                    System.out.println("Invalid choice, pick again!");
+                }
+            } catch (java.util.InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+                scanner.nextLine(); // Consume the invalid input
             }
         }
     }

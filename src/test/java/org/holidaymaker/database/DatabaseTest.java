@@ -4,9 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.xml.crypto.Data;
 import java.awt.print.Book;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,10 +35,8 @@ class DatabaseTest {
     void createNewUser() {
         Connection conn = null;
         try{
-            Database dbInstance = Database.getInstance();
-            //connect to a test schema instead of real one
-            conn = dbInstance.connectToDb("jdbc:mysql://161.97.144.27:8010/test?user=root&password=helpingfindinginnings");
-            dbInstance.setConn(conn);
+            setConnectionToTestDb();
+            //creating a new users will read from db
             Users users = new Users();
             int lastIdBefore;
             if(users.getList().isEmpty()){
@@ -48,13 +44,13 @@ class DatabaseTest {
             }else{
                 lastIdBefore = users.getLastUsersID();
             }
-            dbInstance.createNewUser("testName", "testType", "testEmail");
+            Database.getInstance().createNewUser("testName", "testType", "testEmail");
             users.updateListFromDb();
             int lastIdAfter = users.getLastUsersID();
             //assert, check that lastIdAfter and lastIdBefore are not equal
             assertNotEquals(lastIdAfter, lastIdBefore);
             //cleanup, deleting the last one added
-            dbInstance.deleteUserByID(lastIdAfter);
+            Database.getInstance().deleteUserByID(lastIdAfter);
         }catch(Exception ex){
             fail("Exception should not be thrown: " + ex.getMessage());
         }
@@ -104,16 +100,68 @@ class DatabaseTest {
     //tries to update price of the booking by adding 1000 and then checking the result
     @Test
     void addPriceToBookingByID() {
-        Connection conn = null;
-        Database dbInstance = Database.getInstance();
-        //connect to a test schema instead of real one
-        conn = dbInstance.connectToDb("jdbc:mysql://161.97.144.27:8010/test?user=root&password=helpingfindinginnings");
-        dbInstance.setConn(conn);
+        setConnectionToTestDb();
         int priceToAdd = 1000;
         int currentPrice = Database.getInstance().getPriceOfBookingByID(1);
         Database.getInstance().addPriceToBookingByID(priceToAdd, 1);
         int updatedPrice = Database.getInstance().getPriceOfBookingByID(1);
         int expectedPrice = currentPrice + priceToAdd;
         assertEquals(expectedPrice,updatedPrice);
+    }
+
+    @Test
+    void createNewBookingAccommodation() throws SQLException {
+        setConnectionToTestDb();
+        //clear table before
+        String sql = "TRUNCATE TABLE bookingAccommodation";
+        PreparedStatement statement = Database.getInstance().getConn().prepareStatement(sql);
+        statement.execute();
+
+        //create a bookingaccommodation
+        Database.getInstance().createNewBookingAccommodation(1,1);
+
+        //check if it was inserted
+        boolean isInserted = checkIfDataIsInsertedInDatabase(1,1);
+        assertTrue(isInserted);
+    }
+    //will check if there is any data matching
+    private boolean checkIfDataIsInsertedInDatabase(int accommodationID, int bookingID) {
+        Connection conn = Database.getInstance().connectToDb("jdbc:mysql://161.97.144.27:8010/test?user=root&password=helpingfindinginnings");
+
+        try {
+            String sql = "SELECT COUNT(*) FROM bookingAccommodation WHERE accommodation_ID = ? AND booking_ID = ?";
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setInt(1, accommodationID);
+            statement.setInt(2, bookingID);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                int count = resultSet.getInt(1);
+                return count > 0; // If count is greater than 0, the data is present
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return false; // Return false if there's an error or if data is not found
+    }
+
+    @Test
+    void getListOfMatchingLocation() {
+        setConnectionToTestDb();
+
+        //the testdatabase has been prepared with two accommodations with location Lund in the table accommodation
+        String testLocation = "Lund";
+        ArrayList<Accommodation> list = Database.getInstance().getListOfMatchingLocation(testLocation);
+        assertNotNull(list);
+        assertEquals(2, list.size());
+    }
+
+
+    private void setConnectionToTestDb(){
+        //connect to a test schema instead of real one
+        Connection conn = Database.getInstance().connectToDb("jdbc:mysql://161.97.144.27:8010/test?user=root&password=helpingfindinginnings");;
+        Database.getInstance().setConn(conn);
     }
 }
