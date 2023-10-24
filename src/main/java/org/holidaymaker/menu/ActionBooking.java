@@ -2,6 +2,7 @@ package org.holidaymaker.menu;
 
 import org.holidaymaker.database.*;
 
+import javax.sound.midi.Soundbank;
 import java.sql.Date;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
@@ -46,25 +47,38 @@ public class ActionBooking implements MenuAction {
             System.out.println("2. no");
             choice = scanner.nextInt();
             if(choice == 1){
-                System.out.println("Pick one accommodation ID: ");
+                //need to loop through all activities
                 for (Activity activity: activities){
+                    System.out.println("Pick one accommodation ID for this activity: ");
+                    System.out.println(activity);
+                    System.out.println("");
+                    System.out.println("Accommondation:");
+                    //only get accommodations matching location
                     String activityLocation = Database.getInstance().getActivityLocationByID(activity.getId());
-/*                    System.out.println("location: " + activityLocation);*/
                     ArrayList<Accommodation> accommodationList = Database.getInstance().getListOfMatchingLocation(activityLocation);
-/*                    System.out.println("size: " + accommodationList.size());*/
+                    //prints out list of all matching accommodations
                     for (int i = 0; i < accommodationList.size(); i++) {
                         System.out.println(accommodationList.get(i));
                     }
+                    //loop until we get a correct input
                     while (true) {
-                        System.out.println("Input corresponding accommodation ID:");
+                        System.out.println("Input the accommodation ID:");
                         choice = scanner.nextInt();
-                        if (choice >= 1 && choice <= accommodationList.size()) {
-                            Accommodation selectedAccommodation = accommodationList.get(choice - 1);
-                            System.out.println("you picked:");
-                            System.out.println(selectedAccommodation);
-                            break; // Exit the loop
+                        boolean isValidChoice = false;
+                        for (Accommodation accommodation : accommodationList) {
+                            if (accommodation.id() == choice) {
+                                isValidChoice = true;
+                                System.out.println("You picked:");
+                                System.out.println(accommodation);
+                                System.out.println("");
+                                Database.getInstance().createNewBookingAccommodation(accommodation.id(), bookingID);
+                                break;
+                            }
+                        }
+                        if (!isValidChoice) {
+                            System.out.println("Invalid choice. Please enter a valid accommodation ID.");
                         } else {
-                            System.out.println("Invalid choice. Please pick a number between 1 and " + accommodationList.size() + ".");
+                            break; // Exit the loop
                         }
                     }
                 }

@@ -371,24 +371,6 @@ public class Database {
         return location;
     }
 
-/*        public ArrayList<Integer> getListOfMatchingLocation(String location){
-        ArrayList<Integer> accommodationIds = new ArrayList<>();
-        try{
-            statement = conn.prepareStatement("SELECT * FROM accommodation WHERE location = ?");
-            statement.setString(1, location);
-            resultSet = statement.executeQuery();
-
-            while (resultSet.next()){
-                int accommodationID = resultSet.getInt("id");
-                accommodationIds.add(accommodationID);
-            }
-
-        }catch(Exception ex) {
-            ex.printStackTrace();
-        }
-        return accommodationIds;
-    }*/
-
     public ArrayList<Accommodation> getListOfMatchingLocation(String inLocation){
         ArrayList<Accommodation> accommodationList = new ArrayList<>();
         try{
@@ -411,4 +393,16 @@ public class Database {
         }
         return accommodationList;
     }
+
+    public void createNewBookingAccommodation(int accommodationID, int bookingId) {
+        try {
+            statement = conn.prepareStatement("INSERT INTO bookingAccommodation SET accommodation_ID = ?, booking_ID = ?");
+            statement.setInt(1, accommodationID);
+            statement.setInt(2, bookingId);
+            statement.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 }
