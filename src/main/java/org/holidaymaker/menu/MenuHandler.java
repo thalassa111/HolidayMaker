@@ -15,6 +15,7 @@ public class MenuHandler {
         menuOptions.put(3, new ActionListCustomer());
         menuOptions.put(4, new ActionBooking());
         menuOptions.put(5, new ActionCheckBookings());
+        menuOptions.put(6, new ActionTest());
     }
 
     public void displayMenu(){
@@ -25,17 +26,23 @@ public class MenuHandler {
             System.out.println("3. list customer");
             System.out.println("4. Add Booking");
             System.out.println("5. Check Bookings");
+            System.out.println("6. test");
             System.out.println("0. Exit system");
-            int choice = scanner.nextInt();
 
-            //will run the method executeAction depending on the choice picked earlier
-            if(menuOptions.containsKey(choice)) {
-                menuOptions.get(choice).executeAction();
-            } else if(choice == 0) {
-                System.out.println("Exiting system...");
-                System.exit(0);
-            } else {
-                System.out.println("Invalid choice, pick again!");
+            try {
+                int choice = scanner.nextInt();
+
+                if (menuOptions.containsKey(choice)) {
+                    menuOptions.get(choice).executeAction();
+                } else if (choice == 0) {
+                    System.out.println("Exiting system...");
+                    System.exit(0);
+                } else {
+                    System.out.println("Invalid choice, pick again!");
+                }
+            } catch (java.util.InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+                scanner.nextLine(); // Consume the invalid input
             }
         }
     }

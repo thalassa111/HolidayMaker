@@ -32,8 +32,47 @@ public class ActionBooking implements MenuAction {
                 Database.getInstance().addPriceToBookingByID(currentActivityPrice, newBookingId);
                 db.createNewBookingActivity(newBookingId, activity.getId());
             }
-
+            addAccommodation(newBookingId, Activities);
         }
+
+    }
+
+    private void addAccommodation(int bookingID, ArrayList<Activity> activities){
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+        do{
+            System.out.println("Add accommodation?");
+            System.out.println("1. yes");
+            System.out.println("2. no");
+            choice = scanner.nextInt();
+            if(choice == 1){
+                System.out.println("Pick one accommodation ID: ");
+                for (Activity activity: activities){
+                    String activityLocation = Database.getInstance().getActivityLocationByID(activity.getId());
+/*                    System.out.println("location: " + activityLocation);*/
+                    ArrayList<Accommodation> accommodationList = Database.getInstance().getListOfMatchingLocation(activityLocation);
+/*                    System.out.println("size: " + accommodationList.size());*/
+                    for (int i = 0; i < accommodationList.size(); i++) {
+                        System.out.println(accommodationList.get(i));
+                    }
+                    while (true) {
+                        System.out.println("Input corresponding accommodation ID:");
+                        choice = scanner.nextInt();
+                        if (choice >= 1 && choice <= accommodationList.size()) {
+                            Accommodation selectedAccommodation = accommodationList.get(choice - 1);
+                            System.out.println("you picked:");
+                            System.out.println(selectedAccommodation);
+                            break; // Exit the loop
+                        } else {
+                            System.out.println("Invalid choice. Please pick a number between 1 and " + accommodationList.size() + ".");
+                        }
+                    }
+                }
+                break;
+            } else if(choice != 2){
+                System.out.println("wrong choice, 1 for yes, 2 for no");
+            }
+        }while(choice != 2);
     }
 
     private ArrayList<Activity> selectActivities() {

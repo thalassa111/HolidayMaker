@@ -330,4 +330,85 @@ public class Database {
             statement.executeUpdate();
         }catch (Exception ex){ex.printStackTrace();}
     }
+
+    public ArrayList<Accommodation> listOfAllAccommodations() {
+        getAllAccommodations();
+        ArrayList<Accommodation> accommodationList = new ArrayList<>();
+        try {
+            while (resultSet.next()) {
+                accommodationList.add(new Accommodation(Integer.parseInt(resultSet.getString("id")),
+                        resultSet.getString("accommodation_name"),
+                        resultSet.getDate("accommodation_date"),
+                        resultSet.getString("location"),
+                        resultSet.getInt("Price")));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return accommodationList;
+    }
+
+    private void getAllAccommodations() {
+            try {
+                statement = conn.prepareStatement("SELECT * FROM accommodation");
+                resultSet = statement.executeQuery();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+    }
+    public String getActivityLocationByID(int activityID){
+        String location = "";
+        try {
+            statement = conn.prepareStatement("SELECT location FROM activity WHERE id = ?");
+            statement.setInt(1, activityID);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                location = resultSet.getString("location");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return location;
+    }
+
+/*        public ArrayList<Integer> getListOfMatchingLocation(String location){
+        ArrayList<Integer> accommodationIds = new ArrayList<>();
+        try{
+            statement = conn.prepareStatement("SELECT * FROM accommodation WHERE location = ?");
+            statement.setString(1, location);
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                int accommodationID = resultSet.getInt("id");
+                accommodationIds.add(accommodationID);
+            }
+
+        }catch(Exception ex) {
+            ex.printStackTrace();
+        }
+        return accommodationIds;
+    }*/
+
+    public ArrayList<Accommodation> getListOfMatchingLocation(String inLocation){
+        ArrayList<Accommodation> accommodationList = new ArrayList<>();
+        try{
+            statement = conn.prepareStatement("SELECT * FROM accommodation WHERE location = ?");
+            statement.setString(1, inLocation);
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                int accommodationID = resultSet.getInt("id");
+                String name = resultSet.getString("accommodation_name");
+                Date date = resultSet.getDate("accommodation_date");
+                String location = resultSet.getString("location");
+                int price = resultSet.getInt("price");
+                Accommodation accommodation = new Accommodation(accommodationID, name, date, location, price);
+                accommodationList.add(accommodation);
+            }
+
+        }catch(Exception ex) {
+            ex.printStackTrace();
+        }
+        return accommodationList;
+    }
 }
