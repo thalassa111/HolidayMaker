@@ -94,7 +94,7 @@ public class Database {
     return latestId;
     }
 
-    Connection connectToDb(String dbUrl){
+    public Connection connectToDb(String dbUrl){
         try {
             return DriverManager.getConnection(dbUrl);
         } catch (Exception ex) { ex.printStackTrace(); }
@@ -160,6 +160,19 @@ public class Database {
         try{
             statement = conn.prepareStatement("SELECT * FROM activity WHERE id = ?");
             statement.setInt(1,activityID);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                price = resultSet.getInt("price");
+            }
+        }catch (Exception ex){ex.printStackTrace();}
+        return price;
+    }
+
+    public int getPriceOfAccommodationByID(int accommodationID){
+        int price = 0;
+        try{
+            statement = conn.prepareStatement("SELECT * FROM accommodation WHERE id = ?");
+            statement.setInt(1,accommodationID);
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 price = resultSet.getInt("price");

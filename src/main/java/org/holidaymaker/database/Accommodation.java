@@ -17,6 +17,10 @@ public class Accommodation {
         this.price = price;
     }
 
+    public int getPrice() {
+        return price;
+    }
+
     public int id() {
         return id;
     }
