@@ -117,6 +117,20 @@ public void removeActivityById(int id) {
     }
 }
 
+public int getLatestActivityId() {
+    int latestId = 0;
+    try {
+        statement = conn.prepareStatement("SELECT MAX(id) FROM activity");
+        resultSet = statement.executeQuery();
+        if (resultSet.next()) {
+            latestId = resultSet.getInt(1);
+        }
+    } catch (Exception ex) {
+        ex.printStackTrace();
+    }
+    return latestId;
+}
+
     public ArrayList<Activity> listOfAllActivities() {
         getAllActivities();
         ArrayList<Activity> activitiesList = new ArrayList<Activity>();
