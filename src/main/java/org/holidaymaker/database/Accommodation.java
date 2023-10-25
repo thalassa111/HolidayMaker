@@ -25,6 +25,18 @@ public class Accommodation {
         return id;
     }
 
+    public String getAccomodation_name() {
+        return accomodation_name;
+    }
+
+    public Date getAccomodation_date() {
+        return accomodation_date;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
     @Override
     public String toString() {
         return  "ID: " + id +

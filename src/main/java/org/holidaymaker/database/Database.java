@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Database {
     private static Database instance;
@@ -264,7 +265,27 @@ public class Database {
         }
         return tempList;
     }
+    public ArrayList<Accommodation> findAccommodationsById(int id) {
+        ArrayList<Accommodation> tempList = new ArrayList<>();
+        try {
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM accommodation WHERE id = ?");
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
 
+            while (resultSet.next()) {
+                tempList.add(new Accommodation(
+                        resultSet.getInt("id"),
+                        resultSet.getString("accommodation_name"),
+                        resultSet.getDate("accommodation_date"),
+                        resultSet.getString("location"),
+                        resultSet.getInt("price")
+                ));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return tempList;
+    }
 
     void getAllBookings() {
         try {
