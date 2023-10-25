@@ -33,7 +33,7 @@ public class User {
     public String toString() {
         return  "ID: " + id +
                 " | Name: " + name +
-                " | Type: " + type +
-                " | Email: " + email;
+                " | Email: " + email +
+                " | Type: " + type;
     }
 }

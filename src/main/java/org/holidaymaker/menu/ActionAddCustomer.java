@@ -22,5 +22,6 @@ public class ActionAddCustomer implements MenuAction{
         String email = scannerIn.nextLine();
         System.out.print("Adding customer:" + " Name = " + name + " Email = " + email + " Type = " + type + "\n");
         Database.getInstance().createNewUser(name, type, email);
+        System.out.println("");
     }
 }
