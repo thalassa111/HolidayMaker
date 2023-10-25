@@ -22,14 +22,15 @@ public class ActionRemoveActivity implements MenuAction {
             return;
         }
 
-        System.out.println("List of Activities:");
+        System.out.println("\nList of all Activities");
+        System.out.println("=================");
         for (Activity activity : activities) {
             System.out.println(activity.getId() + ": " + activity.getActivityName());
         }
 
         // Prompt the user to enter the ID of the activity to remove
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter the ID of the activity to remove: ");
+        System.out.print("\nEnter the ID of the activity to remove: ");
         int idToRemove = scanner.nextInt();
 
         // Remove the selected activity

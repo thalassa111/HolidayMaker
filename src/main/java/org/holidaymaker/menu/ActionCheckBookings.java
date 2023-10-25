@@ -11,6 +11,8 @@ public class ActionCheckBookings implements MenuAction{
     @Override
     public void executeAction() {
         bookings = new Bookings();
+        System.out.println("\nCheck All Bookings");
+        System.out.println("==================");
         bookings.printAllBookings();
         handleBookings();
     }
