@@ -11,6 +11,10 @@ public class Bookings {
         this.list = db.ListOfAllBookings();
     }
 
+    public ArrayList<Booking> getList() {
+        return list;
+    }
+
     public void updateListFromDb(){
         this.list = db.ListOfAllBookings();
     }
