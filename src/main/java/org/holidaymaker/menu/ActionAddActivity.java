@@ -9,7 +9,7 @@ public class ActionAddActivity implements MenuAction {
     public void executeAction() {
         Scanner scanner = new Scanner(System.in);
         
-        System.out.println("Add New Activity");
+        System.out.println("\nAdd New Activity");
         System.out.println("=================");
         
         System.out.print("Enter activity name: ");
