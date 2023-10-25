@@ -14,6 +14,10 @@ public class Booking {
         this.price = price;
     }
 
+    public int getPrice() {
+        return price;
+    }
+
     public int getId() {return id;}
 
     public Date getDate() {return date;}

@@ -9,6 +9,9 @@ public class ActionAddActivity implements MenuAction {
     public void executeAction() {
         Scanner scanner = new Scanner(System.in);
         
+        System.out.println("\nAdd New Activity");
+        System.out.println("=================");
+        
         System.out.print("Enter activity name: ");
         String activity_name = scanner.nextLine();
         
@@ -30,6 +33,6 @@ public class ActionAddActivity implements MenuAction {
         // Call the createNewActivity method in the Database class to insert the activity
         db.createNewActivity(activity_name, activity_date, location, price, description);
         
-        System.out.println("Activity added successfully!");
+        System.out.println("\nActivity added successfully!\n");
     }
 }

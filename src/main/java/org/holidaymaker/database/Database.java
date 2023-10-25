@@ -114,10 +114,10 @@ public class Database {
 
     public void createNewUser(String name, String type, String email) {
         try {
-            statement = conn.prepareStatement("INSERT INTO customer SET name = ?, type = ?, email = ?");
+            statement = conn.prepareStatement("INSERT INTO customer SET name = ?, email = ?, type = ?");
             statement.setString(1, name);
-            statement.setString(2, type);
-            statement.setString(3, email);
+            statement.setString(2, email);
+            statement.setString(3, type);
             statement.executeUpdate();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -296,6 +296,23 @@ public class Database {
         }
     }
 
+    public Booking getBookingById(int bookingId){
+        try {
+            statement = conn.prepareStatement("SELECT * FROM booking WHERE id = ?");
+            statement.setInt(1, bookingId);
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                return new Booking(Integer.parseInt(resultSet.getString("id")),
+                        resultSet.getDate("booking_date"),
+                        resultSet.getInt("price"));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
     public ArrayList<Booking> ListOfAllBookings() {
         getAllBookings();
         ArrayList<Booking> BookingList = new ArrayList<Booking>();
@@ -339,6 +356,80 @@ public class Database {
             ex.printStackTrace();
         }
     }
+
+    public ArrayList<User> getCustomersFromBookingId(int bookingId){
+        ArrayList<User> customerList = new ArrayList<>();
+        try {
+            String sql =    "SELECT customer.* " +
+                            "FROM customer " +
+                            "JOIN bookingCustomers ON customer.id = bookingCustomers.customer_id " +
+                            "WHERE bookingCustomers.booking_id = ?";
+            statement = conn.prepareStatement(sql);
+            statement.setInt(1, bookingId);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                User customer = new User(   resultSet.getInt("id"),
+                                            resultSet.getString("name"),
+                                            resultSet.getString("email"),
+                                            resultSet.getString("type"));
+                customerList.add(customer);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return customerList;
+    }
+
+    public ArrayList<Activity> getActivitiesFromBookingId(int bookingId){
+        ArrayList<Activity> activityList = new ArrayList<>();
+        try {
+            String sql =    "SELECT activity.* " +
+                            "FROM activity " +
+                            "JOIN bookingActivities ON activity.id = bookingActivities.activity_id " +
+                            "WHERE bookingActivities.booking_id = ?";
+            statement = conn.prepareStatement(sql);
+            statement.setInt(1, bookingId);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Activity activity = new Activity(   Integer.parseInt(resultSet.getString("id")),
+                                                resultSet.getString("activity_name"),
+                                                resultSet.getDate("activity_date"),
+                                                resultSet.getString("location"),
+                                                resultSet.getInt("price"),
+                                                resultSet.getString("Description"));
+                activityList.add(activity);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return activityList;
+    }
+
+    public ArrayList<Accommodation> getAccommodationFromBookingId(int bookingId){
+        ArrayList<Accommodation> accommodationsList = new ArrayList<>();
+        try {
+            String sql =    "SELECT accommodation.* " +
+                            "FROM accommodation " +
+                            "JOIN bookingAccommodation ON accommodation.id = bookingAccommodation.accommodation_id " +
+                            "WHERE bookingAccommodation.booking_id = ?";
+            statement = conn.prepareStatement(sql);
+            statement.setInt(1, bookingId);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Accommodation accommodation = new Accommodation(   Integer.parseInt(resultSet.getString("id")),
+                                                                    resultSet.getString("accommodation_name"),
+                                                                    resultSet.getDate("accommodation_date"),
+                                                                    resultSet.getString("location"),
+                                                                    resultSet.getInt("price"));
+
+                accommodationsList.add(accommodation);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return accommodationsList;
+    }
+
     public void createNewBookingActivity(int bookingId ,int activityId) {
         try {
             statement = conn.prepareStatement("INSERT INTO bookingActivities SET booking_ID = ?, activity_ID = ?");
