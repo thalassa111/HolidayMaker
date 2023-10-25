@@ -99,7 +99,8 @@ public class ActionBooking implements MenuAction {
         Database db = Database.getInstance();
         ArrayList<Activity> selectedActivities = new ArrayList<>();
 
-        System.out.println("Activities:");
+        System.out.println("\nBooking");
+        System.out.println("=======");
         Activities activitiesUtils = new Activities();
         activitiesUtils.printAllActivities();
 

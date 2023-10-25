@@ -11,6 +11,8 @@ public class ActionListCustomer implements MenuAction{
     @Override
     public void executeAction() {
         users = new Users();
+        System.out.println("\nList of all Customers");
+        System.out.println("=====================");
         users.printAllUsers();
         handleCustomers();
     }

@@ -15,10 +15,12 @@ public class ActionListActivities implements MenuAction {
 
     @Override
     public void executeAction() {
-        System.out.println("List of All Activities:");
+        System.out.println("\nList of all Activities");
+        System.out.println("======================");
         activities.printAllActivities();
 
-        System.out.println("\nList of Travel Packages:");
+        System.out.println("\nList of all Travel Packages");
+        System.out.println("=================");
         travelPackage.createTravelPackage(activities, 1, 2, 3);
         travelPackage.createTravelPackage(activities, 4, 5, 6);
         travelPackage.createTravelPackage(activities,  8);
