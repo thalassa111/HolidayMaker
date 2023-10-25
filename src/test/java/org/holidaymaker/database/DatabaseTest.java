@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import javax.xml.crypto.Data;
 import java.awt.print.Book;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -209,6 +210,45 @@ class DatabaseTest {
         ArrayList<Accommodation> list = Database.getInstance().getAccommodationFromBookingId(bookingID);
         assertEquals(2,list.size());
     }
+
+    @Test
+    void createNewBooking() {
+        setConnectionToTestDb();
+        Date currentDate = new Date(System.currentTimeMillis());
+
+        int generatedId = Database.getInstance().createNewBooking(currentDate);
+
+        assertTrue(generatedId > 0);
+
+        Booking booking = fetchBooking(generatedId);
+
+        LocalDate expectedDate = LocalDate.of(2023, 10, 25);
+        java.util.Date actualLocalDate = booking.getDate();
+
+        assertEquals(expectedDate.toString(), booking.getDate().toString());
+    }
+    private Booking fetchBooking(int bookingId) {
+        try {
+            PreparedStatement statement = Database.getInstance().getConn().prepareStatement("SELECT * FROM booking WHERE id = ?");
+            statement.setInt(1, bookingId);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                Date date = resultSet.getDate("booking_date");
+
+                int price = resultSet.getInt("price");
+
+                return new Booking(id, date, price);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return null;
+    }
+    
 
     private void setConnectionToTestDb(){
         //connect to a test schema instead of real one
