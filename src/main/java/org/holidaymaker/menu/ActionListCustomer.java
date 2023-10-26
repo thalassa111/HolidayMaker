@@ -22,7 +22,7 @@ public class ActionListCustomer implements MenuAction{
         do {
             System.out.println("What would you like to do?");
             System.out.println("1. Remove customer");
-            /*System.out.println("2. Edit customer");*/
+            System.out.println("2. Edit customer");
             System.out.println("0. Back");
             choice = scanner.nextInt();
 
@@ -30,9 +30,9 @@ public class ActionListCustomer implements MenuAction{
                 case 1:
                     removeCustomer();
                     break;
-/*                case 2:
+                case 2:
                     editCustomer();
-                    break;*/
+                    break;
                 default:
                     System.out.println("Wrong choice");
             }
@@ -57,9 +57,25 @@ public class ActionListCustomer implements MenuAction{
             }
         }while(choice != 0);
     }
-    //keep for now, add if we have time
-    private void editCustomer(){
+
+    public void editCustomer(){
         users.printAllUsers();
         System.out.println("type id of the user you want to edit:");
+        int choice = scanner.nextInt();
+        if (users.isInDb(choice)) {
+            System.out.println("Enter the new details for the user:");
+            System.out.println("New name: ");
+            String newName = scanner.next();
+            System.out.println("New email: ");
+            String newEmail = scanner.next();
+            System.out.println("New type: ");
+            String newType = scanner.next();
+            // Update the user in the database
+            Database.getInstance().updateUserById(choice, newName, newEmail, newType);
+            users.updateListFromDb();
+            System.out.println("User with id " + choice + " has been updated.");
+        } else {
+            System.out.println("User with ID " + choice + " not found.");
+        }
     }
 }
