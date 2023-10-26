@@ -500,4 +500,17 @@ public class Database {
             ex.printStackTrace();
         }
     }
+
+    public void updateUserById(int userId, String newName, String newEmail, String newType) {
+        try {
+            statement = conn.prepareStatement("UPDATE customer SET name = ?, email = ?, type = ? WHERE id = ?");
+            statement.setString(1, newName);
+            statement.setString(2, newEmail);
+            statement.setString(3, newType);
+            statement.setInt(4, userId);
+            statement.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }
