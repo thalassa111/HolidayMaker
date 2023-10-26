@@ -222,7 +222,7 @@ class DatabaseTest {
 
         Booking booking = fetchBooking(generatedId);
 
-        LocalDate expectedDate = LocalDate.of(2023, 10, 25);
+        LocalDate expectedDate = LocalDate.now();
         java.util.Date actualLocalDate = booking.getDate();
 
         assertEquals(expectedDate.toString(), booking.getDate().toString());
